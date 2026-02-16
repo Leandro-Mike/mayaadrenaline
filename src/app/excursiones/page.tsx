@@ -1,4 +1,4 @@
-import Image from 'next/image';
+﻿import Image from 'next/image';
 import Link from 'next/link';
 import { Settings } from '@/types/settings';
 
@@ -45,7 +45,7 @@ interface Excursion {
 // Fetch categories from WP API
 async function getCategories(): Promise<Category[]> {
     try {
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
         const res = await fetch(`${apiUrl}/wp-json/wp/v2/categoria_excursion?per_page=100`, {
             next: { revalidate: 60 },
         });
@@ -69,7 +69,7 @@ async function getCategories(): Promise<Category[]> {
 // Fetch activities from WP API
 async function getActivities(): Promise<Activity[]> {
     try {
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
         const res = await fetch(`${apiUrl}/wp-json/wp/v2/actividad_excursion?per_page=100`, {
             next: { revalidate: 60 },
         });
@@ -90,7 +90,7 @@ async function getActivities(): Promise<Activity[]> {
 // Fetch Excursions from WP API
 async function getExcursiones(): Promise<Excursion[]> {
     try {
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
         const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?_embed&per_page=100`, {
             next: { revalidate: 60 },
         });
@@ -112,7 +112,7 @@ async function getExcursiones(): Promise<Excursion[]> {
 
 // Fetch Settings
 async function getSettings(): Promise<Settings> {
-    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
     try {
         const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
@@ -136,7 +136,7 @@ export default async function ExcursionesPage() {
         settingsData
     ]);
 
-    const heroImage = settings.experiencias_hero_image || `${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/tulum4-scaled.webp`;
+    const heroImage = settings.experiencias_hero_image || `/wp-content/uploads/2026/02/tulum4-scaled.webp`;
 
 
     return (
@@ -193,7 +193,7 @@ export default async function ExcursionesPage() {
                                         </Link>
                                     ))
                                 ) : (
-                                    <p className="text-sm italic opacity-70">Cargando categorías...</p>
+                                    <p className="text-sm italic opacity-70">Cargando categorÃ­as...</p>
                                 )}
                             </div>
 
@@ -209,3 +209,4 @@ export default async function ExcursionesPage() {
         </div>
     );
 }
+

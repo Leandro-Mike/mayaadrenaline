@@ -10,7 +10,7 @@ export default function BotonCTA2({ text = "Reservar", href = "#" }: BotonCTA2Pr
                 {text}
             </span>
             <div className="bg-white rounded-full p-3 shadow-md w-14 h-14 flex items-center justify-center transition-transform group-hover:rotate-45">
-                <img src={`${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/flechaUp.svg`} alt="Arrow" className="w-6 h-6" />
+                <img src={`/wp-content/uploads/2026/02/flechaUp.svg`} alt="Arrow" className="w-6 h-6" />
             </div>
         </a>
     );

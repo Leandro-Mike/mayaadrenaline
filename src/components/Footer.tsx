@@ -1,9 +1,9 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 import { Settings } from '@/types/settings';
 
 async function getSettings(): Promise<Settings> {
-    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
     try {
         const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
@@ -28,7 +28,7 @@ export default async function Footer() {
                         {/* Assuming the logo includes the stylized text as seen in header */}
                         <Link href="/">
                             <img
-                                src={`${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/logo.svg`}
+                                src={`/wp-content/uploads/2026/02/logo.svg`}
                                 alt="Maya Adrenaline"
                                 className="w-64 h-auto brightness-0 invert"
                             />
@@ -91,3 +91,4 @@ export default async function Footer() {
         </footer>
     );
 }
+

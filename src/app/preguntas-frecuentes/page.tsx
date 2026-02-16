@@ -1,4 +1,4 @@
-
+﻿
 import BotonCTA from '@/components/botonCTA';
 import { Settings } from '@/types/settings';
 
@@ -14,7 +14,7 @@ interface FAQItem {
 }
 
 async function getFAQs(): Promise<FAQItem[]> {
-    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
     try {
         const res = await fetch(`${apiUrl}/wp-json/wp/v2/faq?per_page=100`, { next: { revalidate: 60 } });
         if (!res.ok) return [];
@@ -26,7 +26,7 @@ async function getFAQs(): Promise<FAQItem[]> {
 }
 
 async function getSettings(): Promise<Settings> {
-    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
     try {
         const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
@@ -44,13 +44,13 @@ export default async function FaqPage() {
     const fallbackFaqs = [
         {
             id: 9991,
-            title: { rendered: "¿Necesito experiencia previa para las actividades?" },
-            content: { rendered: "No, nuestras actividades están diseñadas para todos los niveles. Nuestros guías certificados te darán instrucciones detalladas antes de comenzar." }
+            title: { rendered: "Â¿Necesito experiencia previa para las actividades?" },
+            content: { rendered: "No, nuestras actividades estÃ¡n diseÃ±adas para todos los niveles. Nuestros guÃ­as certificados te darÃ¡n instrucciones detalladas antes de comenzar." }
         },
         {
             id: 9992,
-            title: { rendered: "¿Qué debo llevar a las excursiones?" },
-            content: { rendered: "Recomendamos ropa cómoda, traje de baño, toalla, cambios de ropa seca, zapatos de agua o tenis que se puedan mojar, repelente biodegradable y protector solar biodegradable." }
+            title: { rendered: "Â¿QuÃ© debo llevar a las excursiones?" },
+            content: { rendered: "Recomendamos ropa cÃ³moda, traje de baÃ±o, toalla, cambios de ropa seca, zapatos de agua o tenis que se puedan mojar, repelente biodegradable y protector solar biodegradable." }
         }
     ];
 
@@ -101,7 +101,7 @@ export default async function FaqPage() {
                     ))}
 
                     <div className="text-center pt-12">
-                        <p className="font-montserrat text-gray-600 mb-6">¿Aún tienes dudas?</p>
+                        <p className="font-montserrat text-gray-600 mb-6">Â¿AÃºn tienes dudas?</p>
                         <div className="flex justify-center">
                             <BotonCTA />
                         </div>
@@ -113,3 +113,4 @@ export default async function FaqPage() {
         </div>
     );
 }
+

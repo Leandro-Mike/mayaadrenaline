@@ -14,13 +14,13 @@ export default function ExperienciasPopulares() {
             title: "Full Day",
             subtitle: "Aventura y diversión de la selva.",
             href: "/excursiones",
-            image: `${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/imgIzq.webp`
+            image: `/wp-content/uploads/2026/02/imgIzq.webp`
         },
         {
             title: "Maya Explosion",
             subtitle: "Aventura y diversión de la selva.",
             href: "/excursiones",
-            image: `${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/imgDer.webp`
+            image: `/wp-content/uploads/2026/02/imgDer.webp`
         },
         {
             title: "Tulum Adrenaline",

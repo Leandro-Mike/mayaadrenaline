@@ -203,7 +203,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
                                             <div className="bg-white rounded-full p-3 w-12 h-12 flex items-center justify-center shadow-sm">
                                                 {/* Using a down/left arrow or rotating the up-right one */}
                                                 <img
-                                                    src={`${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/flechaUp.svg`}
+                                                    src={`/wp-content/uploads/2026/02/flechaUp.svg`}
                                                     alt="Arrow"
                                                     className="w-5 h-5 rotate-180"
                                                 />
@@ -217,7 +217,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
 
                                     {/* Static Arrow for Normal State (Fades out on hover) */}
                                     <div className="absolute top-6 right-6 bg-white rounded-full p-3 w-12 h-12 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0 z-20">
-                                        <img src={`${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/flechaUp.svg`} alt="Arrow" className="w-5 h-5" />
+                                        <img src={`/wp-content/uploads/2026/02/flechaUp.svg`} alt="Arrow" className="w-5 h-5" />
                                     </div>
 
 

@@ -1,9 +1,9 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import CarruselExperiencias from "@/components/CarruselExperiencias";
 import ExperienciasPopulares from "@/components/ExperienciasPopulares";
 import BotonCTA2 from "@/components/botonCTA2";
 
-// Definir la forma de los datos de Excursión desde la API de WP
+// Definir la forma de los datos de ExcursiÃ³n desde la API de WP
 interface Excursion {
   id: number;
   slug: string;
@@ -13,8 +13,8 @@ interface Excursion {
   excerpt: {
     rendered: string;
   };
-  precio: string; // El campo personalizado que añadimos
-  tagline: string; // El campo personalizado que añadimos
+  precio: string; // El campo personalizado que aÃ±adimos
+  tagline: string; // El campo personalizado que aÃ±adimos
   _embedded?: {
     "wp:featuredmedia"?: Array<{
       source_url: string;
@@ -29,7 +29,7 @@ import { Settings } from "@/types/settings";
 // ... (Excursion interface remains)
 
 async function getSettings(): Promise<Settings> {
-  const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
   try {
     const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, {
       next: { revalidate: 60 },
@@ -44,7 +44,7 @@ async function getSettings(): Promise<Settings> {
 
 async function getExcursiones(): Promise<Excursion[]> {
   // ... (unchanged fetch logic)
-  const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+  const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
   const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?_embed`, {
     next: { revalidate: 10 },
   });
@@ -67,7 +67,7 @@ export default async function Home() {
   const fetchedSettings = settings.status === 'fulfilled' ? settings.value : {} as Settings;
 
   // Fallback URLs
-  const defaultUrl = process.env.NEXT_PUBLIC_API_URL || '';
+  const defaultUrl = (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || '';
   const heroImage = fetchedSettings.home_hero_image || `${defaultUrl}/wp-content/uploads/2026/02/hero.webp`;
   const ctaImage = fetchedSettings.home_cta_image || `${defaultUrl}/wp-content/uploads/2026/02/bannerCTA.webp`;
   const vistazoHImage = fetchedSettings.home_vistazo_h_image || `${defaultUrl}/wp-content/uploads/2026/02/imgIzq.webp`;
@@ -83,7 +83,7 @@ export default async function Home() {
     <div className="min-h-screen font-sans">
       {/* Header eliminado: manejado por el layout */}
 
-      {/* Sección Hero */}
+      {/* SecciÃ³n Hero */}
       <section
         className="bg-black/30 bg-blend-overlay text-white mt-[-100px] py-20 text-center bg-cover bg-no-repeat h-[100vh] flex items-center justify-center flex-col"
         style={{ backgroundImage: `url('${heroImage}')` }}
@@ -96,7 +96,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Sección Grid */}
+      {/* SecciÃ³n Grid */}
       <main className="container mx-auto px-4 py-12 bg-ma-gris-claro w-full h-screen">
 
 
@@ -124,7 +124,7 @@ export default async function Home() {
           >
             <div className="relative z-10 flex flex-col items-center">
               <p className="text-xl md:text-4xl font-extrabold text-center mb-8 md:mb-12 leading-snug font-nunito">
-                “Fui con toda mi familia a MayaAdrenaline, fue la mejor desicion de mi vida, volveremos.”
+                â€œFui con toda mi familia a MayaAdrenaline, fue la mejor desicion de mi vida, volveremos.â€
               </p>
 
               <div className="w-full flex justify-end">
@@ -138,7 +138,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Sección Vistazo Rápido */}
+      {/* SecciÃ³n Vistazo RÃ¡pido */}
       <section className="py-24 bg-ma-gris-claro">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -158,7 +158,7 @@ export default async function Home() {
                   Un vistazo rapido
                 </h2>
                 <p className="text-lg md:text-xl italic text-ma-verdeazul mb-8 font-montserrat max-w-lg">
-                  Somos una empresa de turismo local, con más de 10 años de experiencia operando excursiones y actividades en la Riviera Maya.
+                  Somos una empresa de turismo local, con mÃ¡s de 10 aÃ±os de experiencia operando excursiones y actividades en la Riviera Maya.
                 </p>
 
                 <div className="flex justify-start">
@@ -182,7 +182,7 @@ export default async function Home() {
               {/* Overlay Card - Protruding */}
               <div className="absolute top-12 -right-6 md:-right-12 bg-ma-verde-fondo text-white p-8 md:p-10 rounded-[40px] max-w-[350px] md:max-w-[400px] shadow-2xl z-20">
                 <h3 className="text-2xl md:text-4xl font-extrabold leading-tight font-nunito">
-                  12 años creando experiencias increibles
+                  12 aÃ±os creando experiencias increibles
                 </h3>
               </div>
             </div>
@@ -195,3 +195,4 @@ export default async function Home() {
     </div>
   );
 }
+

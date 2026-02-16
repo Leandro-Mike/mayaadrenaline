@@ -14,7 +14,7 @@ export default function Header() {
 
                 <div className="flex items-center space-x-6 gap-8">
                     <Link href="/">
-                        <img className="w-48" src={`${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/logo.svg`} alt="" />
+                        <img className="w-48" src={`/wp-content/uploads/2026/02/logo.svg`} alt="" />
                     </Link>
 
 

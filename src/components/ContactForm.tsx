@@ -17,7 +17,7 @@ export default function ContactForm() {
         setRespMessage('');
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wp-json/maya-adrenaline/v1/contact`, {
+            const res = await fetch(`/wp-json/maya-adrenaline/v1/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

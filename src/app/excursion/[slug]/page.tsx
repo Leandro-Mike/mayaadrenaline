@@ -28,8 +28,8 @@ interface Excursion {
 // Generate Static Params for Static Export
 export async function generateStaticParams() {
     try {
-        // Use build-time URL (local) if available, otherwise public URL
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+        // Use build-time URL (local) if available, otherwise public URL, with explicit fallback
+        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx';
         const posts = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100`).then((res) => res.json());
         return posts.map((post: any) => ({
             slug: post.slug,

@@ -1,4 +1,4 @@
-
+﻿
 import Link from 'next/link';
 
 interface ExcursionPrecio {
@@ -9,7 +9,7 @@ interface ExcursionPrecio {
 
 async function getExcursionPrices(): Promise<ExcursionPrecio[]> {
     try {
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
         const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100&_fields=id,title,precio`, {
             next: { revalidate: 300 },
         });
@@ -38,7 +38,7 @@ import { Settings } from '@/types/settings';
 // ... (ExcursionPrecio interface)
 
 async function getSettings(): Promise<Settings> {
-    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
     try {
         const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
@@ -85,7 +85,7 @@ export default async function PreciosPage() {
                         <table className="w-full text-left font-montserrat">
                             <thead className="bg-ma-verdeazul text-white font-bold uppercase tracking-wider border-b-4 border-ma-amarillo">
                                 <tr>
-                                    <th className="px-6 py-4 rounded-tl-xl text-lg">Excursión</th>
+                                    <th className="px-6 py-4 rounded-tl-xl text-lg">ExcursiÃ³n</th>
                                     <th className="px-6 py-4 rounded-tr-xl text-lg text-right">Precio por Persona</th>
                                 </tr>
                             </thead>
@@ -112,7 +112,7 @@ export default async function PreciosPage() {
                     </div>
 
                     <div className="mt-8 text-center text-gray-500 text-sm italic">
-                        * Los precios están sujetos a cambios sin previo aviso. Contáctanos para más información o grupos grandes.
+                        * Los precios estÃ¡n sujetos a cambios sin previo aviso. ContÃ¡ctanos para mÃ¡s informaciÃ³n o grupos grandes.
                     </div>
                 </div>
             </section>
@@ -120,3 +120,4 @@ export default async function PreciosPage() {
         </div>
     );
 }
+

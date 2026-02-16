@@ -1,9 +1,9 @@
-
+﻿
 import ContactForm from '@/components/ContactForm';
 import { Settings } from '@/types/settings';
 
 async function getSettings(): Promise<Settings> {
-    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
     try {
         const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
@@ -29,7 +29,7 @@ export default async function ContactoPage() {
 
     const email = settings.email || 'info@mayaadrenaline.com';
     const phone = settings.phone || '+52 984 123 4567';
-    const address = settings.address || 'Riviera Maya, Quintana Roo, México';
+    const address = settings.address || 'Riviera Maya, Quintana Roo, MÃ©xico';
 
     return (
         <div className="font-sans bg-[#F4F1E8] min-h-screen">
@@ -51,7 +51,7 @@ export default async function ContactoPage() {
                     </h1>
                     <div className="w-24 h-1 bg-ma-amarillo rounded-full mb-6"></div>
                     <p className="text-xl font-montserrat font-light max-w-2xl">
-                        ¿Tienes dudas o quieres personalizar tu aventura? Estamos aquí para ayudarte.
+                        Â¿Tienes dudas o quieres personalizar tu aventura? Estamos aquÃ­ para ayudarte.
                     </p>
                 </div>
             </section>
@@ -63,22 +63,22 @@ export default async function ContactoPage() {
                     {/* Contact Info */}
                     <div className="space-y-12">
                         <div>
-                            <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-6">Información de Contacto</h3>
+                            <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-6">InformaciÃ³n de Contacto</h3>
                             <p className="font-montserrat text-gray-700 leading-relaxed mb-8">
                                 Si prefieres contactarnos directamente, puedes usar los siguientes medios. Respondemos usualmente en menos de 24 horas.
                             </p>
 
                             <ul className="space-y-6 font-montserrat text-lg text-gray-800">
                                 <li className="flex items-center gap-4">
-                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl">📧</span>
+                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl">ðŸ“§</span>
                                     <a href={`mailto:${email}`} className="hover:text-ma-amarillo transition-colors">{email}</a>
                                 </li>
                                 <li className="flex items-center gap-4">
-                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl">📞</span>
+                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl">ðŸ“ž</span>
                                     <a href={`tel:${phone.replace(/\s+/g, '')}`} className="hover:text-ma-amarillo transition-colors">{phone}</a>
                                 </li>
                                 <li className="flex items-center gap-4">
-                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl">📍</span>
+                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl">ðŸ“</span>
                                     <span>{address}</span>
                                 </li>
                             </ul>
@@ -87,7 +87,7 @@ export default async function ContactoPage() {
 
                     {/* Form Component */}
                     <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-xl relative overflow-hidden">
-                        <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-8">Envíanos un mensaje</h3>
+                        <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-8">EnvÃ­anos un mensaje</h3>
                         <ContactForm />
                     </div>
 
@@ -97,3 +97,4 @@ export default async function ContactoPage() {
         </div>
     );
 }
+

@@ -69,11 +69,11 @@ export default function Carousel({ excursiones }: { excursiones: Excursion[] }) 
                 {/* Navigation Buttons - Absolute Top Right */}
                 <div className='absolute top-30 right-10 z-10 flex gap-4'>
                     <button className="embla__prev cursor-pointer bg-white rounded-full p-3 hover:scale-110 transition-transform shadow-sm" onClick={scrollPrev}>
-                        <img className='w-6 h-6 opacity-60' src={`${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/flechaPrev.svg`} alt="Prev" />
+                        <img className='w-6 h-6 opacity-60' src={`/wp-content/uploads/2026/02/flechaPrev.svg`} alt="Prev" />
                     </button>
 
                     <button className="embla__next cursor-pointer bg-white rounded-full p-3 hover:scale-110 transition-transform shadow-sm" onClick={scrollNext}>
-                        <img className='w-6 h-6 opacity-60' src={`${process.env.NEXT_PUBLIC_API_URL}/wp-content/uploads/2026/02/flechaNext.svg`} alt="Next" />
+                        <img className='w-6 h-6 opacity-60' src={`/wp-content/uploads/2026/02/flechaNext.svg`} alt="Next" />
                     </button>
                 </div>
 
