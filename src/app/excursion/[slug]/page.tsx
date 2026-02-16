@@ -46,7 +46,7 @@ export async function generateStaticParams() {
 }
 
 async function getExcursion(slug: string): Promise<Excursion | null> {
-    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx';
     const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?slug=${slug}&_embed`, {
         next: { revalidate: 60 },
     });
