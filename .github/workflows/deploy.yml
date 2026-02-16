@@ -36,7 +36,8 @@ jobs:
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
+        # key: ${{ secrets.SSH_KEY }} # Comentado si usas password
+        password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT || 22 }}
         source: "out/*"
         target: ${{ secrets.REMOTE_TARGET }} # Ej: /home/u12345/public_html
