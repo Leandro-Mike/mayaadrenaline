@@ -66,7 +66,7 @@ export async function generateStaticParams() {
 // Fetch single excursion
 async function getExcursion(slug: string): Promise<Excursion | null> {
     try {
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx';
         const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?slug=${slug}&_embed`, {
             next: { revalidate: 60 },
         });
@@ -94,7 +94,7 @@ async function getExcursion(slug: string): Promise<Excursion | null> {
 // Fetch Settings
 async function getSettings(): Promise<Settings> {
     try {
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx';
         const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, {
             next: { revalidate: 60 },
         });
