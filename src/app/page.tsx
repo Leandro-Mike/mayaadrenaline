@@ -1,65 +1,197 @@
 import Image from "next/image";
+import CarruselExperiencias from "@/components/CarruselExperiencias";
+import ExperienciasPopulares from "@/components/ExperienciasPopulares";
+import BotonCTA2 from "@/components/botonCTA2";
 
-export default function Home() {
+// Definir la forma de los datos de Excursión desde la API de WP
+interface Excursion {
+  id: number;
+  slug: string;
+  title: {
+    rendered: string;
+  };
+  excerpt: {
+    rendered: string;
+  };
+  precio: string; // El campo personalizado que añadimos
+  tagline: string; // El campo personalizado que añadimos
+  _embedded?: {
+    "wp:featuredmedia"?: Array<{
+      source_url: string;
+      alt_text: string;
+    }>;
+  };
+  link: string;
+}
+
+import { Settings } from "@/types/settings";
+
+// ... (Excursion interface remains)
+
+async function getSettings(): Promise<Settings> {
+  const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+  try {
+    const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) throw new Error("Failed to fetch settings");
+    return res.json();
+  } catch (error) {
+    console.error("Error fetching settings:", error);
+    return {} as Settings;
+  }
+}
+
+async function getExcursiones(): Promise<Excursion[]> {
+  // ... (unchanged fetch logic)
+  const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL;
+  const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?_embed`, {
+    next: { revalidate: 10 },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
+  }
+
+  return res.json();
+}
+
+export default async function Home() {
+  const settingsData = getSettings();
+  const excursionesData = getExcursiones();
+
+  // Fetch in parallel. Handle excursiones error gracefully to allow render
+  const [settings, excursionesResult] = await Promise.allSettled([settingsData, excursionesData]);
+
+  const excursiones = excursionesResult.status === 'fulfilled' ? excursionesResult.value : [];
+  const fetchedSettings = settings.status === 'fulfilled' ? settings.value : {} as Settings;
+
+  // Fallback URLs
+  const defaultUrl = process.env.NEXT_PUBLIC_API_URL || '';
+  const heroImage = fetchedSettings.home_hero_image || `${defaultUrl}/wp-content/uploads/2026/02/hero.webp`;
+  const ctaImage = fetchedSettings.home_cta_image || `${defaultUrl}/wp-content/uploads/2026/02/bannerCTA.webp`;
+  const vistazoHImage = fetchedSettings.home_vistazo_h_image || `${defaultUrl}/wp-content/uploads/2026/02/imgIzq.webp`;
+  const vistazoVImage = fetchedSettings.home_vistazo_v_image || `${defaultUrl}/wp-content/uploads/2026/02/imgDer.webp`;
+
+  if (excursionesResult.status === 'rejected') {
+    console.error("Error loading excursions:", excursionesResult.reason);
+    // Optional: Render error state if needed, but for now we proceed with empty list or previous behavior
+  }
+
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen font-sans">
+      {/* Header eliminado: manejado por el layout */}
+
+      {/* Sección Hero */}
+      <section
+        className="bg-black/30 bg-blend-overlay text-white mt-[-100px] py-20 text-center bg-cover bg-no-repeat h-[100vh] flex items-center justify-center flex-col"
+        style={{ backgroundImage: `url('${heroImage}')` }}
+      >
+        <div className="container mx-auto px-4">
+          <h2 className="font-nunito md:text-7xl text-5xl font-extrabold mb-8 text-right text-white leading-tight">Historia <br /> y aventura</h2>
+
+          <ExperienciasPopulares />
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </section>
+
+      {/* Sección Grid */}
+      <main className="container mx-auto px-4 py-12 bg-ma-gris-claro w-full h-screen">
+
+
+        <CarruselExperiencias excursiones={excursiones} />
       </main>
+
+
+
+      { /* CTA  */}
+
+      <section className="bg-ma-verdeazul py-24">
+        <div className="container mx-auto px-4">
+          <h3 className="text-white text-center text-2xl md:text-4xl font-bold mb-16 max-w-5xl mx-auto leading-tight font-nunito">
+            Siempre nos esforzamos por transmitir la adrenalina
+            de nuestras experiencias y la paz de la naturaleza.
+          </h3>
+
+          <div
+            className="w-full max-w-6xl mx-auto bg-white rounded-[20px] md:rounded-[40px] p-8 md:p-20 relative overflow-hidden text-ma-verdeazul shadow-2xl"
+            style={{
+              backgroundImage: `url('${ctaImage}')`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            <div className="relative z-10 flex flex-col items-center">
+              <p className="text-xl md:text-4xl font-extrabold text-center mb-8 md:mb-12 leading-snug font-nunito">
+                “Fui con toda mi familia a MayaAdrenaline, fue la mejor desicion de mi vida, volveremos.”
+              </p>
+
+              <div className="w-full flex justify-end">
+                <div className="text-right">
+                  <p className="font-bold text-lg md:text-xl italic">Andrea Andrada</p>
+                  <p className="text-md md:text-lg italic">Experiencia Full Day</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Sección Vistazo Rápido */}
+      <section className="py-24 bg-ma-gris-claro">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            {/* Columna Izquierda */}
+            <div className="flex flex-col gap-8">
+              <div className="relative w-full aspect-[4/3] rounded-[40px] overflow-hidden shadow-lg">
+                <Image
+                  src={vistazoHImage}
+                  alt="Vista de las instalaciones"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-ma-verdeazul mb-6 font-nunito">
+                  Un vistazo rapido
+                </h2>
+                <p className="text-lg md:text-xl italic text-ma-verdeazul mb-8 font-montserrat max-w-lg">
+                  Somos una empresa de turismo local, con más de 10 años de experiencia operando excursiones y actividades en la Riviera Maya.
+                </p>
+
+                <div className="flex justify-start">
+                  <BotonCTA2 text="Conocenos" href="#" />
+                </div>
+              </div>
+            </div>
+
+            {/* Columna Derecha */}
+            <div className="relative w-full h-[600px] md:h-[700px] group">
+              {/* Image Container with Mask */}
+              <div className="absolute inset-0 rounded-[40px] overflow-hidden shadow-lg">
+                <Image
+                  src={vistazoVImage}
+                  alt="Explorando la naturaleza"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+
+              {/* Overlay Card - Protruding */}
+              <div className="absolute top-12 -right-6 md:-right-12 bg-ma-verde-fondo text-white p-8 md:p-10 rounded-[40px] max-w-[350px] md:max-w-[400px] shadow-2xl z-20">
+                <h3 className="text-2xl md:text-4xl font-extrabold leading-tight font-nunito">
+                  12 años creando experiencias increibles
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Footer eliminado: manejado por el layout */}
     </div>
   );
 }
