@@ -3,7 +3,7 @@ import ContactForm from '@/components/ContactForm';
 import { Settings } from '@/types/settings';
 
 async function getSettings(): Promise<Settings> {
-    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
+    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
     try {
         const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
@@ -97,4 +97,5 @@ export default async function ContactoPage() {
         </div>
     );
 }
+
 

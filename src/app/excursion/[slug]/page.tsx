@@ -29,7 +29,7 @@ interface Excursion {
 export async function generateStaticParams() {
     try {
         // Use build-time URL (local) if available, otherwise public URL, with explicit fallback
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx';
+        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
         const posts = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100`).then((res) => res.json());
         return posts.map((post: any) => ({
             slug: post.slug,
@@ -46,7 +46,7 @@ export async function generateStaticParams() {
 }
 
 async function getExcursion(slug: string): Promise<Excursion | null> {
-    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx';
+    const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
     const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?slug=${slug}&_embed`, {
         next: { revalidate: 60 },
     });

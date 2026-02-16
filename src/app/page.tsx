@@ -29,7 +29,7 @@ import { Settings } from "@/types/settings";
 // ... (Excursion interface remains)
 
 async function getSettings(): Promise<Settings> {
-  const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
+  const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
   try {
     const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, {
       next: { revalidate: 60 },
@@ -44,7 +44,7 @@ async function getSettings(): Promise<Settings> {
 
 async function getExcursiones(): Promise<Excursion[]> {
   // ... (unchanged fetch logic)
-  const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
+  const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
   const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?_embed`, {
     next: { revalidate: 10 },
   });
@@ -67,7 +67,7 @@ export default async function Home() {
   const fetchedSettings = settings.status === 'fulfilled' ? settings.value : {} as Settings;
 
   // Fallback URLs
-  const defaultUrl = (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || '';
+  const defaultUrl = (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || '';
   const heroImage = fetchedSettings.home_hero_image || `${defaultUrl}/wp-content/uploads/2026/02/hero.webp`;
   const ctaImage = fetchedSettings.home_cta_image || `${defaultUrl}/wp-content/uploads/2026/02/bannerCTA.webp`;
   const vistazoHImage = fetchedSettings.home_vistazo_h_image || `${defaultUrl}/wp-content/uploads/2026/02/imgIzq.webp`;
@@ -195,4 +195,5 @@ export default async function Home() {
     </div>
   );
 }
+
 

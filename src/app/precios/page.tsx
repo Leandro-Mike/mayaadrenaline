@@ -9,7 +9,7 @@ interface ExcursionPrecio {
 
 async function getExcursionPrices(): Promise<ExcursionPrecio[]> {
     try {
-        const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
+        const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
         const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100&_fields=id,title,precio`, {
             next: { revalidate: 300 },
         });
@@ -38,7 +38,7 @@ import { Settings } from '@/types/settings';
 // ... (ExcursionPrecio interface)
 
 async function getSettings(): Promise<Settings> {
-    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://mayaadrenaline.com.mx') || 'https://mayaadrenaline.com.mx');
+    const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
     try {
         const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
@@ -120,4 +120,5 @@ export default async function PreciosPage() {
         </div>
     );
 }
+
 
