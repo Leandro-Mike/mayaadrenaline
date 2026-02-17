@@ -45,11 +45,20 @@ interface Settings {
 }
 
 // Generate Static Params for Static Export
+export const dynamicParams = true; // Allow fallback to dynamic rendering if needed (though export output usually implies static)
+
 export async function generateStaticParams() {
+    console.log("Generating static params for Excursions...");
     try {
         // Use build-time URL (local) if available, otherwise public URL
         const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
         const posts = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100`).then((res) => res.json());
+
+        if (!Array.isArray(posts)) {
+            console.error("Posts is not an array:", posts);
+            return [];
+        }
+
         return posts.map((post: any) => ({
             slug: post.slug,
         }));
