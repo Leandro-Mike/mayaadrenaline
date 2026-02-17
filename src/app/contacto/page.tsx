@@ -70,15 +70,15 @@ export default async function ContactoPage() {
 
                             <ul className="space-y-6 font-montserrat text-lg text-gray-800">
                                 <li className="flex items-center gap-4">
-                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl"><img src="https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/email-open-svgrepo-com.svg" className="w-6 h-6" alt="" srcset="" /></span>
+                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl"><img src="https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/email-open-svgrepo-com.svg" className="w-6 h-6" alt="" /></span>
                                     <a href={`mailto:${email}`} className="hover:text-ma-amarillo transition-colors">{email}</a>
                                 </li>
                                 <li className="flex items-center gap-4">
-                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl"><img src="https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/phone-alt-svgrepo-com.svg" className="w-6 h-6" alt="" srcset="" /></span>
+                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl"><img src="https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/phone-alt-svgrepo-com.svg" className="w-6 h-6" alt="" /></span>
                                     <a href={`tel:${phone.replace(/\s+/g, '')}`} className="hover:text-ma-amarillo transition-colors">{phone}</a>
                                 </li>
                                 <li className="flex items-center gap-4">
-                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl"><img src="https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/map-pin-svgrepo-com.svg" className="w-6 h-6" alt="" srcset="" /></span>
+                                    <span className="w-12 h-12 bg-ma-verdeazul text-white rounded-full flex items-center justify-center text-xl"><img src="https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/map-pin-svgrepo-com.svg" className="w-6 h-6" alt="" /></span>
                                     <span>{address}</span>
                                 </li>
                             </ul>
