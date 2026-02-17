@@ -30,7 +30,7 @@ export default function ExperienciasPopulares() {
     ];
 
     return (
-        <div className="bg-black/40 backdrop-blur-md rounded-[2rem] p-6 text-white max-w-lg w-[450px] ml-auto mt-8 border border-white/10 text-left">
+        <div className="bg-black/40 backdrop-blur-md rounded-[2rem] p-6 text-white w-full md:w-[450px] mx-auto md:ml-0 mt-12 md:mt-8 border border-white/10 text-left">
             <h3 className="text-2xl font-nunito font-normal mb-3 text-ma-gris-claro">Experiencias populares</h3>
 
             <div className="flex flex-col space-y-3">

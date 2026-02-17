@@ -3,7 +3,7 @@ import CarruselExperiencias from "@/components/CarruselExperiencias";
 import ExperienciasPopulares from "@/components/ExperienciasPopulares";
 import BotonCTA2 from "@/components/botonCTA2";
 
-// Definir la forma de los datos de ExcursiÃ³n desde la API de WP
+// Definir la forma de los datos de Excursión desde la API de WP
 interface Excursion {
   id: number;
   slug: string;
@@ -13,8 +13,8 @@ interface Excursion {
   excerpt: {
     rendered: string;
   };
-  precio: string; // El campo personalizado que aÃ±adimos
-  tagline: string; // El campo personalizado que aÃ±adimos
+  precio: string; // El campo personalizado que añadimos
+  tagline: string; // El campo personalizado que añadimos
   _embedded?: {
     "wp:featuredmedia"?: Array<{
       source_url: string;
@@ -83,21 +83,21 @@ export default async function Home() {
     <div className="min-h-screen font-sans">
       {/* Header eliminado: manejado por el layout */}
 
-      {/* SecciÃ³n Hero */}
+      {/* Sección Hero */}
       <section
-        className="bg-black/30 bg-blend-overlay text-white mt-[-100px] py-20 text-center bg-cover bg-no-repeat h-[100vh] flex items-center justify-center flex-col"
+        className="bg-black/30 bg-blend-overlay text-white pt-40 pb-20 md:py-20 text-center bg-cover bg-no-repeat min-h-screen flex items-center justify-center flex-col"
         style={{ backgroundImage: `url('${heroImage}')` }}
       >
         <div className="container mx-auto px-4">
-          <h2 className="font-nunito md:text-7xl text-5xl font-extrabold mb-8 text-right text-white leading-tight">Historia <br /> y aventura</h2>
+          <h2 className="font-nunito md:text-7xl text-5xl font-extrabold mb-16 md:mb-8 text-center md:text-left text-white leading-tight">Historia <br /> y aventura</h2>
 
           <ExperienciasPopulares />
 
         </div>
       </section>
 
-      {/* SecciÃ³n Grid */}
-      <main className="container mx-auto px-4 py-12 bg-ma-gris-claro w-full h-screen">
+      {/* Sección Grid */}
+      <main className="container mx-auto px-4 py-12 bg-ma-gris-claro w-full min-h-screen">
 
 
         <CarruselExperiencias excursiones={excursiones} />
@@ -124,7 +124,7 @@ export default async function Home() {
           >
             <div className="relative z-10 flex flex-col items-center">
               <p className="text-xl md:text-4xl font-extrabold text-center mb-8 md:mb-12 leading-snug font-nunito">
-                â€œFui con toda mi familia a MayaAdrenaline, fue la mejor desicion de mi vida, volveremos.â€
+                “Fui con toda mi familia a MayaAdrenaline, fue la mejor desicion de mi vida, volveremos.”
               </p>
 
               <div className="w-full flex justify-end">
@@ -138,7 +138,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* SecciÃ³n Vistazo RÃ¡pido */}
+      {/* Sección Vistazo Rápido */}
       <section className="py-24 bg-ma-gris-claro">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -155,14 +155,14 @@ export default async function Home() {
 
               <div>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-ma-verdeazul mb-6 font-nunito">
-                  Un vistazo rapido
+                  Un vistazo rápido
                 </h2>
                 <p className="text-lg md:text-xl italic text-ma-verdeazul mb-8 font-montserrat max-w-lg">
-                  Somos una empresa de turismo local, con mÃ¡s de 10 aÃ±os de experiencia operando excursiones y actividades en la Riviera Maya.
+                  Somos una empresa de turismo local, con más de 10 años de experiencia operando excursiones y actividades en la Riviera Maya.
                 </p>
 
                 <div className="flex justify-start">
-                  <BotonCTA2 text="Conocenos" href="#" />
+                  <BotonCTA2 text="Conocenos" href="/nosotros" />
                 </div>
               </div>
             </div>
@@ -182,7 +182,7 @@ export default async function Home() {
               {/* Overlay Card - Protruding */}
               <div className="absolute top-12 -right-6 md:-right-12 bg-ma-verde-fondo text-white p-8 md:p-10 rounded-[40px] max-w-[350px] md:max-w-[400px] shadow-2xl z-20">
                 <h3 className="text-2xl md:text-4xl font-extrabold leading-tight font-nunito">
-                  12 aÃ±os creando experiencias increibles
+                  12 años creando experiencias increíbles
                 </h3>
               </div>
             </div>
@@ -195,5 +195,3 @@ export default async function Home() {
     </div>
   );
 }
-
-

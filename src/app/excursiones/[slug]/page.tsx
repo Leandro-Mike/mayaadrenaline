@@ -19,6 +19,7 @@ interface Excursion {
     };
     precio: string;
     tagline: string;
+    duration: string; // Added duration
     gallery_images?: { id: number; url: string; alt: string }[];
     _embedded?: {
         "wp:featuredmedia"?: Array<{
@@ -67,6 +68,7 @@ export async function generateStaticParams() {
 async function getExcursion(slug: string): Promise<Excursion | null> {
     try {
         const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
+        // Ensure to fetch all custom fields if not included by default, but standard REST should include registered fields
         const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?slug=${slug}&_embed`, {
             next: { revalidate: 60 },
         });
@@ -74,7 +76,7 @@ async function getExcursion(slug: string): Promise<Excursion | null> {
         if (!res.ok) return null;
 
         const data: Excursion[] = await res.json();
-        return data[0];
+        return data[0] || null;
     } catch (error) {
         console.error("Error fetching excursion:", error);
         // Mock data to prevent build failure
@@ -86,8 +88,9 @@ async function getExcursion(slug: string): Promise<Excursion | null> {
             excerpt: { rendered: "Próximamente" },
             precio: "0",
             tagline: "Aventura",
+            duration: "N/A", // Mock duration
             link: "#"
-        };
+        } as Excursion;
     }
 }
 
@@ -178,6 +181,14 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
                     <p className="text-xl md:text-2xl font-medium italic font-montserrat max-w-2xl drop-shadow-md">
                         {excursion.tagline}
                     </p>
+                    {excursion.duration && (
+                        <div className="mt-8 flex items-center justify-center gap-2 bg-ma-verdeazul/80 backdrop-blur-sm px-6 py-2 rounded-full border border-ma-amarillo">
+                            <svg className="w-5 h-5 text-ma-amarillo" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className="text-white font-bold uppercase tracking-wider text-sm">{excursion.duration}</span>
+                        </div>
+                    )}
                 </div>
             </section>
 

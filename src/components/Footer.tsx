@@ -29,7 +29,7 @@ export default async function Footer() {
                         {/* Assuming the logo includes the stylized text as seen in header */}
                         <Link href="/">
                             <img
-                                src={`/wp-content/uploads/2026/02/logo.svg`}
+                                src={`https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/logo.svg`}
                                 alt="Maya Adrenaline"
                                 className="w-64 h-auto brightness-0 invert"
                             />
@@ -52,7 +52,7 @@ export default async function Footer() {
                             {settings.social_youtube && (
                                 <li><a href={settings.social_youtube} target="_blank" rel="noopener noreferrer" className="hover:text-ma-amarillo transition-colors">YouTube</a></li>
                             )}
-                            <li><Link href="/contacto" className="hover:text-ma-amarillo transition-colors">Contacto</Link></li>
+
                         </ul>
                     </div>
 
@@ -60,7 +60,7 @@ export default async function Footer() {
                     <div>
                         <h4 className="font-bold text-lg mb-6 font-nunito">Recursos</h4>
                         <ul className="space-y-4 font-montserrat font-light text-gray-300">
-                            <li><Link href="/" className="hover:text-ma-amarillo transition-colors">Maya Adrenaline</Link></li>
+
                             <li><Link href="/excursiones" className="hover:text-ma-amarillo transition-colors">Excursiones</Link></li>
                             <li><a href="#" className="hover:text-ma-amarillo transition-colors">Servicios</a></li>
                         </ul>
@@ -72,7 +72,8 @@ export default async function Footer() {
                         <ul className="space-y-4 font-montserrat font-light text-gray-300">
                             <li><a href="/preguntas-frecuentes" className="hover:text-ma-amarillo transition-colors">Preguntas Frecuentes</a></li>
                             <li><a href="/precios" className="hover:text-ma-amarillo transition-colors">Precios</a></li>
-                            <li><a href="/preguntas-frecuentes" className="hover:text-ma-amarillo transition-colors">Consejos</a></li>
+                            <li><Link href="/contacto" className="hover:text-ma-amarillo transition-colors">Contacto</Link></li>
+
                         </ul>
                     </div>
                 </div>
@@ -85,7 +86,7 @@ export default async function Footer() {
                         Copyright &copy; {year} Maya Adrenaline. All Rights Reserved.
                     </div>
                     <div>
-                        Creado por <a href="#" className="hover:text-white transition-colors">MikeWordPress</a>
+                        Creado por <a href="https://mikewordpress.com/" className="hover:text-white transition-colors">MikeWordPress</a>
                     </div>
                 </div>
             </div>

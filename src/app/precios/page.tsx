@@ -1,16 +1,20 @@
 ﻿
 import Link from 'next/link';
+import PriceTable from '@/components/PriceTable'; // Import Client Component
 
 interface ExcursionPrecio {
     id: number;
     title: string;
     price: string;
+    slug: string;
+    duration: string; // Added duration
 }
 
 async function getExcursionPrices(): Promise<ExcursionPrecio[]> {
     try {
         const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
-        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100&_fields=id,title,precio`, {
+        // Added duration to fields
+        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100&_fields=id,title,precio,slug,duration`, {
             next: { revalidate: 300 },
         });
 
@@ -21,21 +25,20 @@ async function getExcursionPrices(): Promise<ExcursionPrecio[]> {
             id: item.id,
             title: item.title.rendered,
             price: item.precio || 'Consultar',
+            slug: item.slug,
+            duration: item.duration || 'N/A', // Map duration
         }));
     } catch (error) {
         console.error("Error fetching prices:", error);
         return [];
     }
 }
-
 export const metadata = {
     title: 'Precios - Maya Adrenaline',
     description: 'Consulta los precios de todas nuestras excursiones y aventuras.',
 };
 
 import { Settings } from '@/types/settings';
-
-// ... (ExcursionPrecio interface)
 
 async function getSettings(): Promise<Settings> {
     const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
@@ -81,38 +84,10 @@ export default async function PreciosPage() {
             <section className="container mx-auto px-4 py-20">
                 <div className="max-w-4xl mx-auto bg-white rounded-[30px] p-8 md:p-12 shadow-xl overflow-hidden">
 
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left font-montserrat">
-                            <thead className="bg-ma-verdeazul text-white font-bold uppercase tracking-wider border-b-4 border-ma-amarillo">
-                                <tr>
-                                    <th className="px-6 py-4 rounded-tl-xl text-lg">ExcursiÃ³n</th>
-                                    <th className="px-6 py-4 rounded-tr-xl text-lg text-right">Precio por Persona</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {excursions.length > 0 ? (
-                                    excursions.map((exc) => (
-                                        <tr key={exc.id} className="hover:bg-gray-50 transition-colors">
-                                            <td className="px-6 py-6 font-medium text-gray-800 text-lg">
-                                                <div dangerouslySetInnerHTML={{ __html: exc.title }} />
-                                            </td>
-                                            <td className="px-6 py-6 text-right font-bold text-ma-verdeazul text-xl space-x-1">
-                                                <span className="text-sm text-gray-400 font-normal mr-1">USD</span>
-                                                <span>${exc.price}</span>
-                                            </td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan={2} className="px-6 py-8 text-center text-gray-500 italic">No hay excursiones disponibles por el momento.</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                    <PriceTable initialExcursions={excursions} />
 
                     <div className="mt-8 text-center text-gray-500 text-sm italic">
-                        * Los precios estÃ¡n sujetos a cambios sin previo aviso. ContÃ¡ctanos para mÃ¡s informaciÃ³n o grupos grandes.
+                        * Los precios están sujetos a cambios sin previo aviso. Contáctanos para más información o grupos grandes.
                     </div>
                 </div>
             </section>

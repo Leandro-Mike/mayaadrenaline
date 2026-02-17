@@ -52,7 +52,7 @@ export default function ContactForm() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat placeholder-gray-600"
                     placeholder="Tu nombre completo"
                     required
                 />
@@ -66,7 +66,7 @@ export default function ContactForm() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat placeholder-gray-600"
                     placeholder="tucorreo@ejemplo.com"
                     required
                 />
@@ -80,7 +80,7 @@ export default function ContactForm() {
                     value={formData.message}
                     onChange={handleChange}
                     rows={5}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat resize-none"
+                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat resize-none placeholder-gray-600"
                     placeholder="¿En qué podemos ayudarte?"
                     required
                 ></textarea>

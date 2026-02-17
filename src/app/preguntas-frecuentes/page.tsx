@@ -1,4 +1,5 @@
 ﻿
+import FAQList from '@/components/FAQList';
 import BotonCTA from '@/components/botonCTA';
 import { Settings } from '@/types/settings';
 
@@ -37,24 +38,24 @@ async function getSettings(): Promise<Settings> {
 }
 
 export default async function FaqPage() {
-    const faqsData = getFAQs();
-    const settingsData = getSettings();
+    const apiFaqsPromise = getFAQs();
+    const settingsDataPromise = getSettings();
 
-    // Fallback FAQs hardcoded if API returns empty (optional, but good for empty state)
+    // Fallback FAQs hardcoded if API returns empty
     const fallbackFaqs = [
         {
             id: 9991,
-            title: { rendered: "Â¿Necesito experiencia previa para las actividades?" },
-            content: { rendered: "No, nuestras actividades estÃ¡n diseÃ±adas para todos los niveles. Nuestros guÃ­as certificados te darÃ¡n instrucciones detalladas antes de comenzar." }
+            title: { rendered: "¿Necesito experiencia previa para las actividades?" },
+            content: { rendered: "No, nuestras actividades están diseñadas para todos los niveles. Nuestros guías certificados te darán instrucciones detalladas antes de comenzar." }
         },
         {
             id: 9992,
-            title: { rendered: "Â¿QuÃ© debo llevar a las excursiones?" },
-            content: { rendered: "Recomendamos ropa cÃ³moda, traje de baÃ±o, toalla, cambios de ropa seca, zapatos de agua o tenis que se puedan mojar, repelente biodegradable y protector solar biodegradable." }
+            title: { rendered: "¿Qué debo llevar a las excursiones?" },
+            content: { rendered: "Recomendamos ropa cómoda, traje de baño, toalla, cambios de ropa seca, zapatos de agua o tenis que se puedan mojar, repelente biodegradable y protector solar biodegradable." }
         }
     ];
 
-    const [apiFaqs, settings] = await Promise.all([faqsData, settingsData]);
+    const [apiFaqs, settings] = await Promise.all([apiFaqsPromise, settingsDataPromise]);
 
     const faqs = apiFaqs.length > 0 ? apiFaqs : fallbackFaqs;
 
@@ -87,21 +88,10 @@ export default async function FaqPage() {
             <section className="container mx-auto px-4 py-20">
                 <div className="max-w-4xl mx-auto space-y-8">
 
-                    {faqs.map((faq) => (
-                        <div key={faq.id} className="bg-white rounded-[30px] p-8 shadow-sm hover:shadow-md transition-shadow">
-                            <h3 className="text-xl font-bold font-nunito text-ma-verdeazul mb-4 flex items-start gap-3">
-                                <span className="text-ma-amarillo text-2xl">Q.</span>
-                                <span dangerouslySetInnerHTML={{ __html: faq.title.rendered }} />
-                            </h3>
-                            <div
-                                className="font-montserrat text-gray-600 pl-8 leading-relaxed prose prose-sm max-w-none text-justify"
-                                dangerouslySetInnerHTML={{ __html: faq.content.rendered }}
-                            />
-                        </div>
-                    ))}
+                    <FAQList faqs={faqs} />
 
                     <div className="text-center pt-12">
-                        <p className="font-montserrat text-gray-600 mb-6">Â¿AÃºn tienes dudas?</p>
+                        <p className="font-montserrat text-gray-600 mb-6">¿Aún tienes dudas?</p>
                         <div className="flex justify-center">
                             <BotonCTA />
                         </div>
