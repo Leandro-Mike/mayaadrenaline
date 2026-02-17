@@ -45,7 +45,7 @@ interface Settings {
 }
 
 // Generate Static Params for Static Export
-export const dynamicParams = true; // Allow fallback to dynamic rendering if needed (though export output usually implies static)
+export const dynamicParams = false; // Required for output: export to ensure all pages are pre-rendered static HTML
 
 export async function generateStaticParams() {
     console.log("Generating static params for Excursions...");
