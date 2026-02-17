@@ -177,22 +177,20 @@ export default async function ExcursionesPage() {
                             <div className="flex flex-wrap justify-center md:justify-end gap-6">
                                 {categories.length > 0 ? (
                                     categories.map((cat) => (
-                                        categories.map((cat) => (
-                                            <div key={cat.id} className="group flex flex-col items-center">
-                                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white/10 transition-colors overflow-hidden relative">
-                                                    {cat.imagen ? (
-                                                        <Image
-                                                            src={cat.imagen}
-                                                            alt={cat.name}
-                                                            fill
-                                                            className="object-contain p-4"
-                                                        />
-                                                    ) : (
-                                                        <span className="text-xs text-center px-1">{cat.name}</span>
-                                                    )}
-                                                </div>
+                                        <div key={cat.id} className="group flex flex-col items-center">
+                                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-transparent group-hover:bg-white/10 transition-colors overflow-hidden relative">
+                                                {cat.imagen ? (
+                                                    <Image
+                                                        src={cat.imagen}
+                                                        alt={cat.name}
+                                                        fill
+                                                        className="object-contain p-4"
+                                                    />
+                                                ) : (
+                                                    <span className="text-xs text-center px-1">{cat.name}</span>
+                                                )}
                                             </div>
-                                        ))
+                                        </div>
                                     ))
                                 ) : (
                                     <p className="text-sm italic opacity-70">Cargando categorías...</p>
