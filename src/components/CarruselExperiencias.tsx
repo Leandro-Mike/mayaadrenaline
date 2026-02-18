@@ -84,7 +84,7 @@ export default function Carousel({ excursiones }: { excursiones: Excursion[] }) 
                             return (
                                 <article
                                     key={excursion.id}
-                                    className={`embla__slide relative flex-[0_0_70%] md:flex-[0_0_45%] mx-2 md:mx-4 h-[400px] md:h-[500px] rounded-[30px] md:rounded-[40px] overflow-hidden shadow-xl transition-all duration-500 ease-out group ${index % 2 === 0 ? 'mt-0' : 'md:mt-24 mt-0'}`}
+                                    className={`embla__slide relative flex-[0_0_100%] md:flex-[0_0_45%] md:mx-4 h-[400px] md:h-[500px] rounded-[30px] md:rounded-[40px] overflow-hidden shadow-xl transition-all duration-500 ease-out group ${index % 2 === 0 ? 'mt-0' : 'md:mt-24 mt-0'}`}
                                 >
                                     <Link href={`/excursiones/${excursion.slug}`} className="absolute inset-0 z-20" aria-label={`Ver ${excursion.title.rendered}`}>
                                         <span className="sr-only">Ver {excursion.title.rendered}</span>

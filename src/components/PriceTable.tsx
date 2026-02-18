@@ -37,86 +37,100 @@ export default function PriceTable({ initialExcursions }: PriceTableProps) {
     };
 
     return (
-        <div className="overflow-x-auto">
-            <table className="w-full text-left font-montserrat table-fixed">
-                <thead className="bg-ma-verdeazul text-white font-bold uppercase tracking-wider border-b-4 border-ma-amarillo">
-                    <tr>
-                        <th className="px-4 py-4 rounded-tl-xl text-lg w-1/2">Excursión</th>
-                        <th className="px-4 py-4 text-center text-lg w-1/4">Duración</th>
-                        <th
-                            className="px-4 py-4 rounded-tr-xl text-lg text-right w-1/4 cursor-pointer hover:bg-white/10 transition-colors select-none"
-                            onClick={handleSort}
-                        >
-                            <div className="flex items-center justify-end gap-2">
-                                <span>Precio</span>
-                                <div className="flex flex-col text-[10px] leading-none opacity-70">
-                                    <span className={sortOrder === 'asc' ? 'text-ma-amarillo' : ''}>▲</span>
-                                    <span className={sortOrder === 'desc' ? 'text-ma-amarillo' : ''}>▼</span>
-                                </div>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                    <AnimatePresence>
-                        {excursions.length > 0 ? (
-                            excursions.map((exc) => (
-                                <motion.tr
-                                    key={exc.id}
-                                    layout
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="hover:bg-gray-50 transition-colors group cursor-pointer relative"
-                                >
-                                    <td className="p-0" colSpan={3}>
-                                        <Link href={`/excursiones/${exc.slug}`} className="flex w-full items-center px-4 py-6">
+        <div className="w-full font-montserrat">
+            {/* Cabecera para Desktop - oculta en mobile */}
+            <div className="hidden md:grid grid-cols-12 bg-ma-verdeazul text-white font-bold uppercase tracking-wider border-b-4 border-ma-amarillo rounded-t-xl overflow-hidden shadow-md">
+                <div className="col-span-6 px-6 py-4 text-lg">Excursión</div>
+                <div className="col-span-3 px-4 py-4 text-center text-lg">Duración</div>
+                <div
+                    className="col-span-3 px-6 py-4 text-right text-lg cursor-pointer hover:bg-white/10 transition-colors select-none"
+                    onClick={handleSort}
+                >
+                    <div className="flex items-center justify-end gap-2">
+                        <span>Precio</span>
+                        <div className="flex flex-col text-[10px] leading-none opacity-70">
+                            <span className={sortOrder === 'asc' ? 'text-ma-amarillo' : ''}>▲</span>
+                            <span className={sortOrder === 'desc' ? 'text-ma-amarillo' : ''}>▼</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                                            {/* Title Column */}
-                                            <div className="w-1/2 pr-4 font-medium text-gray-800 text-lg group-hover:text-ma-verdeazul transition-colors">
-                                                <div dangerouslySetInnerHTML={{ __html: exc.title }} />
-                                            </div>
+            {/* Botón de ordenamiento para mobile */}
+            <div className="md:hidden flex justify-end mb-4 px-2">
+                <button
+                    onClick={handleSort}
+                    className="flex items-center gap-2 bg-ma-verdeazul text-white px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider shadow-sm active:scale-95 transition-transform"
+                >
+                    <span>Ordenar por Precio</span>
+                    <div className="flex flex-col text-[10px] leading-none">
+                        <span className={sortOrder === 'asc' ? 'text-ma-amarillo' : 'opacity-40'}>▲</span>
+                        <span className={sortOrder === 'desc' ? 'text-ma-amarillo' : 'opacity-40'}>▼</span>
+                    </div>
+                </button>
+            </div>
 
-                                            {/* Duration Column */}
-                                            <div className="w-1/4 px-2 text-center text-gray-600 font-medium">
-                                                {exc.duration && (
-                                                    <span className="inline-flex items-center bg-gray-100 rounded-full px-3 py-1 text-sm">
-                                                        <svg className="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                                        {exc.duration}
-                                                    </span>
-                                                )}
-                                            </div>
+            <div className="bg-white rounded-xl md:rounded-none md:rounded-b-xl overflow-hidden shadow-sm md:shadow-none divide-y divide-gray-100">
+                <AnimatePresence>
+                    {excursions.length > 0 ? (
+                        excursions.map((exc) => (
+                            <motion.div
+                                key={exc.id}
+                                layout
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                                className="hover:bg-gray-50 transition-colors group relative"
+                            >
+                                <Link href={`/excursiones/${exc.slug}`} className="flex flex-col md:grid md:grid-cols-12 w-full items-start md:items-center px-6 py-6 gap-3 md:gap-0">
 
-                                            {/* Price Column */}
-                                            <div className="w-1/4 pl-4 text-right font-bold text-ma-verdeazul text-xl flex justify-end items-center gap-2">
-                                                <div className="flex flex-col items-end">
-                                                    <span className="text-xs text-gray-400 font-normal">por persona</span>
-                                                    <div className="flex items-center">
-                                                        <span className="text-sm text-gray-400 font-normal mr-1">USD</span>
-                                                        <span>${exc.price}</span>
-                                                    </div>
+                                    {/* Título */}
+                                    <div className="w-full md:col-span-6 md:pr-4 font-bold md:font-medium text-gray-800 text-xl md:text-lg group-hover:text-ma-verdeazul transition-colors">
+                                        <div dangerouslySetInnerHTML={{ __html: exc.title }} />
+                                    </div>
+
+                                    {/* Duración */}
+                                    <div className="w-full md:col-span-3 md:px-2 text-left md:text-center text-gray-600 font-medium">
+                                        {exc.duration && (
+                                            <span className="inline-flex items-center bg-gray-100 rounded-full px-3 py-1 text-sm group-hover:bg-white transition-colors">
+                                                <svg className="w-4 h-4 mr-1 text-ma-verdeazul" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                                {exc.duration}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/* Precio */}
+                                    <div className="w-full md:col-span-3 md:pl-4 text-right font-bold text-ma-verdeazul text-xl flex justify-between md:justify-end items-center gap-4">
+                                        <div className="md:hidden flex flex-col items-start">
+                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Desde</span>
+                                        </div>
+
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex flex-col items-end">
+                                                <span className="hidden md:block text-[10px] text-gray-400 font-normal uppercase tracking-tighter">por persona</span>
+                                                <div className="flex items-center">
+                                                    <span className="text-sm text-gray-400 font-normal mr-1">USD</span>
+                                                    <span className="text-2xl md:text-xl">${exc.price}</span>
                                                 </div>
-
-                                                {/* Arrow Icon */}
-                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity text-ma-amarillo flex-shrink-0">
-                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                                    </svg>
-                                                </div>
                                             </div>
 
-                                        </Link>
-                                    </td>
-                                </motion.tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan={3} className="px-6 py-8 text-center text-gray-500 italic">No hay excursiones disponibles por el momento.</td>
-                            </tr>
-                        )}
-                    </AnimatePresence>
-                </tbody>
-            </table>
+                                            {/* Icono de flecha */}
+                                            <div className="text-ma-amarillo opacity-40 md:opacity-0 md:group-hover:opacity-100 transition-all transform group-hover:translate-x-1">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </Link>
+                            </motion.div>
+                        ))
+                    ) : (
+                        <div className="px-6 py-12 text-center text-gray-500 italic">No hay excursiones disponibles por el momento.</div>
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
     );
 }

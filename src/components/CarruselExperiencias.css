@@ -4,12 +4,15 @@
 
 .embla__container {
     display: flex;
-    gap: 40px;
+    gap: 0;
 }
 
-.embla__slide {
-    flex: 0 0 calc((100% - 100px) / 2);
+@media (min-width: 768px) {
+    .embla__container {
+        gap: 40px;
+    }
 }
+
 
 #CardUp {
     transform: translateY(-20px) !important;
