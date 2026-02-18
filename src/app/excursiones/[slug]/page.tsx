@@ -45,31 +45,50 @@ interface Settings {
 }
 
 // Generate Static Params for Static Export
-export const dynamicParams = false; // Required for output: export to ensure all pages are pre-rendered static HTML
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-    console.log("Generating static params for Excursions...");
-    try {
-        // Use build-time URL (local) if available, otherwise public URL
-        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
-        const posts = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100`).then((res) => res.json());
+    const fallbackSlugs = [
+        { slug: 'full-day' },
+        { slug: 'maya-explosion' },
+        { slug: 'tulum-adrenaline' }
+    ];
 
-        if (!Array.isArray(posts)) {
-            console.error("Posts is not an array:", posts);
-            return [];
+    try {
+        console.log(">>> [Build] Generating static params for /excursiones/[slug]");
+        const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
+
+        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100`, {
+            headers: { 'Accept': 'application/json' },
+            next: { revalidate: 3600 }
+        });
+
+        if (!res.ok) {
+            console.warn(`>>> [Build] Fetch failed with status: ${res.status}. Using fallbacks.`);
+            return fallbackSlugs;
         }
 
-        return posts.map((post: any) => ({
-            slug: post.slug,
-        }));
+        const posts = await res.json();
+
+        if (!Array.isArray(posts)) {
+            console.warn(">>> [Build] Expected array from WP API, got:", typeof posts);
+            return fallbackSlugs;
+        }
+
+        const slugs = posts
+            .filter(post => post && post.slug)
+            .map((post: any) => ({
+                slug: String(post.slug),
+            }));
+
+        console.log(`>>> [Build] Generated ${slugs.length} slugs from API.`);
+
+        // Ensure we always have at least one slug to avoid Next.js "missing" error
+        return slugs.length > 0 ? slugs : fallbackSlugs;
+
     } catch (error) {
-        console.error("Error generating static params:", error);
-        // Fallback slugs to ensure build passes currently
-        return [
-            { slug: 'full-day' },
-            { slug: 'maya-explosion' },
-            { slug: 'tulum-adrenaline' }
-        ];
+        console.error(">>> [Build] Error in generateStaticParams:", error);
+        return fallbackSlugs;
     }
 }
 
