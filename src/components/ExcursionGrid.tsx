@@ -79,7 +79,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
             </AnimatePresence>
 
             {/* Header and Filter */}
-            <div className="flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 gap-6 relative z-30">
+            <div className={`flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 gap-6 relative ${isFilterOpen ? 'z-50' : 'z-30'}`}>
                 <h2 className="text-3xl md:text-4xl font-extrabold text-ma-verdeazul font-nunito text-center md:text-left leading-tight">
                     Explora nuestras propuestas
                 </h2>
