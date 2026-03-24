@@ -26,6 +26,7 @@ interface Excursion {
 
 import { Settings } from "@/types/settings";
 import { sortExcursionsByTitleAsc } from "@/lib/excursionSort";
+import { buildFeaturedExperienceItems } from "@/lib/excursionUtils";
 
 // ... (Excursion interface remains)
 
@@ -76,6 +77,16 @@ export default async function Home() {
   const vistazoHImage = fetchedSettings.home_vistazo_h_image || `${defaultUrl}/wp-content/uploads/2026/02/imgIzq.webp`;
   const vistazoVImage = fetchedSettings.home_vistazo_v_image || `${defaultUrl}/wp-content/uploads/2026/02/imgDer.webp`;
 
+  const apiBaseForImages =
+    defaultUrl || "https://back.mayaadrenaline.com.mx";
+  const popularItems = buildFeaturedExperienceItems(
+    Array.isArray(fetchedSettings.featured_excursion_ids)
+      ? fetchedSettings.featured_excursion_ids
+      : [],
+    excursiones,
+    apiBaseForImages
+  );
+
   if (excursionesResult.status === 'rejected') {
     console.error("Error loading excursions:", excursionesResult.reason);
     // Optional: Render error state if needed, but for now we proceed with empty list or previous behavior
@@ -94,7 +105,7 @@ export default async function Home() {
         <div className="container mx-auto px-4">
           <h2 className="font-nunito md:text-7xl text-5xl font-extrabold mb-16 md:mb-8 text-center md:text-left text-white leading-tight">Historia <br /> y aventura</h2>
 
-          <ExperienciasPopulares />
+          <ExperienciasPopulares items={popularItems} />
 
         </div>
       </section>

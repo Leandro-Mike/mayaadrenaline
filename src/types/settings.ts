@@ -23,4 +23,8 @@ export interface Settings {
     contacto_hero_image: string;
     precios_hero_image: string;
     faq_hero_image: string;
+
+    /** IDs de excursiones destacadas (Config. Web en WordPress) */
+    featured_excursion_ids?: number[];
+    public_web_url?: string;
 }

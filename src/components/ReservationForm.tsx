@@ -1,43 +1,76 @@
 
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { useMemo, useState } from 'react';
+import { parseMoney } from '@/lib/excursionUtils';
+
+export type PrecioAdicionalRow = {
+    etiqueta: string;
+    precio: string;
+};
 
 interface ReservationFormProps {
     excursionTitle: string;
     excursionPrice: string;
     whatsappNumber: string;
     messageTemplate: string;
+    preciosAdicionales?: PrecioAdicionalRow[];
 }
 
-export default function ReservationForm({ excursionTitle, excursionPrice, whatsappNumber, messageTemplate }: ReservationFormProps) {
+export default function ReservationForm({
+    excursionTitle,
+    excursionPrice,
+    whatsappNumber,
+    messageTemplate,
+    preciosAdicionales = [],
+}: ReservationFormProps) {
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [people, setPeople] = useState(1);
 
+    const baseUnit = parseMoney(excursionPrice);
+    const extrasUnit = useMemo(
+        () =>
+            preciosAdicionales.reduce(
+                (sum, row) => sum + parseMoney(row.precio),
+                0
+            ),
+        [preciosAdicionales]
+    );
+    const unitRate = baseUnit + extrasUnit;
+    const totalPrice = unitRate * people;
+    const totalFormatted = Number.isFinite(totalPrice)
+        ? totalPrice.toFixed(2)
+        : '0';
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 1. Process the template variables
-        let message = messageTemplate || "Hola, quiero reservar [NombreExcursion] para [cantidadPersonas] personas el [Fecha]. Mi nombre es [NombrePersona]."; // fallback
+        let message =
+            messageTemplate ||
+            'Hola, quiero reservar [NombreExcursion] para [cantidadPersonas] personas el [Fecha]. Mi nombre es [NombrePersona]. Precio estimado: [precioTotal]';
 
         message = message.replace('[NombreExcursion]', excursionTitle);
         message = message.replace('[cantidadPersonas]', people.toString());
         message = message.replace('[NombrePersona]', name);
         message = message.replace('[Fecha]', date);
-        message = message.replace('[precio]', excursionPrice);
+        message = message.replace('[precio]', baseUnit.toFixed(2));
+        message = message.replace('[precioTotal]', totalFormatted);
 
-        // 2. Encode for URL
+        if (preciosAdicionales.length > 0) {
+            const lines = preciosAdicionales.map(
+                (r) =>
+                    `• ${r.etiqueta}: $${parseMoney(r.precio).toFixed(2)} (por persona)`
+            );
+            message += '\n\n' + lines.join('\n');
+            message += `\nTotal aprox.: $${totalFormatted} (${people} persona(s)).`;
+        }
+
         const encodedMessage = encodeURIComponent(message);
-
-        // 3. Redirect to WhatsApp
         const cleanNumber = whatsappNumber.replace(/\D/g, '');
         const waLink = `https://wa.me/${cleanNumber}?text=${encodedMessage}`;
         window.open(waLink, '_blank');
     };
-
-    const totalPrice = parseFloat(excursionPrice) * people;
 
     return (
         <div className="bg-[#0b1d1d] text-white p-8 rounded-[30px] shadow-2xl max-w-md mx-auto relative overflow-hidden">
@@ -45,7 +78,6 @@ export default function ReservationForm({ excursionTitle, excursionPrice, whatsa
 
             <form onSubmit={handleSubmit} className="space-y-6">
 
-                {/* Name Input */}
                 <div className="relative">
                     <input
                         type="text"
@@ -60,7 +92,6 @@ export default function ReservationForm({ excursionTitle, excursionPrice, whatsa
                     </div>
                 </div>
 
-                {/* Excursion Name (Read-only styled) */}
                 <div className="relative">
                     <div className="w-full bg-[#f4f1e8] text-gray-800 px-6 py-4 rounded-full font-montserrat italic opacity-80 cursor-not-allowed flex items-center justify-between">
                         <span>{excursionTitle}</span>
@@ -68,7 +99,6 @@ export default function ReservationForm({ excursionTitle, excursionPrice, whatsa
                     </div>
                 </div>
 
-                {/* Date Input */}
                 <div className="relative">
                     <input
                         type="date"
@@ -77,20 +107,18 @@ export default function ReservationForm({ excursionTitle, excursionPrice, whatsa
                         className="w-full bg-[#f4f1e8] text-gray-800 placeholder-gray-500 px-6 py-4 rounded-full focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat italic appearance-none"
                         required
                     />
-                    {/* Only show icon if browser doesn't enforce its own, but styling date inputs is tricky. This icon is decorative. */}
                     <div className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     </div>
                 </div>
 
-                {/* People Count */}
                 <div className="relative">
                     <select
                         value={people}
-                        onChange={(e) => setPeople(parseInt(e.target.value))}
+                        onChange={(e) => setPeople(parseInt(e.target.value, 10))}
                         className="w-full bg-[#f4f1e8] text-gray-800 px-6 py-4 rounded-full focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat italic appearance-none cursor-pointer"
                     >
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
                             <option key={num} value={num}>{num} persona{num > 1 ? 's' : ''}</option>
                         ))}
                     </select>
@@ -100,10 +128,31 @@ export default function ReservationForm({ excursionTitle, excursionPrice, whatsa
                     </div>
                 </div>
 
-                {/* Total & Submit */}
+                {preciosAdicionales.length > 0 ? (
+                    <div className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 space-y-2">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-ma-amarillo">
+                            Complementos (sumados por persona)
+                        </p>
+                        <ul className="space-y-1.5 text-sm text-gray-200 font-montserrat">
+                            {preciosAdicionales.map((row, i) => (
+                                <li key={`${row.etiqueta}-${i}`} className="flex justify-between gap-3">
+                                    <span>{row.etiqueta}</span>
+                                    <span className="shrink-0 font-medium">${parseMoney(row.precio).toFixed(2)}</span>
+                                </li>
+                            ))}
+                        </ul>
+                        <p className="text-xs text-gray-400 border-t border-white/10 pt-2 mt-2">
+                            Tarifa por persona: ${unitRate.toFixed(2)} (base ${baseUnit.toFixed(2)}
+                            {extrasUnit > 0 ? ` + complementos ${extrasUnit.toFixed(2)}` : ''})
+                        </p>
+                    </div>
+                ) : null}
+
                 <div className="flex items-center justify-between mt-8 pt-4">
                     <div className="flex flex-col">
-                        <span className="text-white text-3xl font-bold font-nunito">Total: <span className="text-ma-amarillo">${isNaN(totalPrice) ? '0' : totalPrice}</span></span>
+                        <span className="text-white text-3xl font-bold font-nunito">
+                            Total: <span className="text-ma-amarillo">${totalFormatted}</span>
+                        </span>
                     </div>
                     <button
                         type="submit"
