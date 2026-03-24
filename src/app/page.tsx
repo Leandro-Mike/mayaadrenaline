@@ -28,10 +28,33 @@ import { Settings } from "@/types/settings";
 import { sortExcursionsByTitleAsc } from "@/lib/excursionSort";
 import { buildFeaturedExperienceItems } from "@/lib/excursionUtils";
 
-// ... (Excursion interface remains)
+function getWpApiBase(): string {
+  const raw =
+    process.env.WP_BUILD_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://back.mayaadrenaline.com.mx";
+  return raw.replace(/\/$/, "");
+}
+
+function normalizeFeaturedExcursionIds(raw: unknown): number[] {
+  if (!Array.isArray(raw)) {
+    return [];
+  }
+  return [
+    ...new Set(
+      raw
+        .map((id) =>
+          typeof id === "number" && Number.isFinite(id)
+            ? id
+            : parseInt(String(id), 10)
+        )
+        .filter((id) => Number.isFinite(id) && id > 0)
+    ),
+  ];
+}
 
 async function getSettings(): Promise<Settings> {
-  const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
+  const apiUrl = getWpApiBase();
   try {
     const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, {
       next: { revalidate: 60 },
@@ -45,17 +68,37 @@ async function getSettings(): Promise<Settings> {
 }
 
 async function getExcursiones(): Promise<Excursion[]> {
-  // ... (unchanged fetch logic)
-  const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
-  const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?_embed`, {
-    next: { revalidate: 10 },
-  });
+  const apiUrl = getWpApiBase();
+  const res = await fetch(
+    `${apiUrl}/wp-json/wp/v2/excursion?per_page=100&_embed`,
+    {
+      next: { revalidate: 10 },
+    }
+  );
 
   if (!res.ok) {
     throw new Error(`Failed to fetch data: ${res.status} ${res.statusText}`);
   }
 
   return res.json();
+}
+
+/** Excursiones que faltan en el listado (p. ej. están más allá de la primera página). */
+async function fetchExcursionsByIds(ids: number[]): Promise<Excursion[]> {
+  const unique = [...new Set(ids.filter((id) => id > 0))];
+  if (unique.length === 0) {
+    return [];
+  }
+  const apiUrl = getWpApiBase();
+  const res = await fetch(
+    `${apiUrl}/wp-json/wp/v2/excursion?include=${unique.join(",")}&_embed`,
+    { next: { revalidate: 10 } }
+  );
+  if (!res.ok) {
+    return [];
+  }
+  const data: unknown = await res.json();
+  return Array.isArray(data) ? (data as Excursion[]) : [];
 }
 
 export default async function Home() {
@@ -65,10 +108,35 @@ export default async function Home() {
   // Fetch in parallel. Handle excursiones error gracefully to allow render
   const [settings, excursionesResult] = await Promise.allSettled([settingsData, excursionesData]);
 
-  const excursiones = sortExcursionsByTitleAsc(
+  let excursiones = sortExcursionsByTitleAsc(
     excursionesResult.status === 'fulfilled' ? excursionesResult.value : []
   );
   const fetchedSettings = settings.status === 'fulfilled' ? settings.value : {} as Settings;
+
+  const featuredIds = normalizeFeaturedExcursionIds(
+    fetchedSettings.featured_excursion_ids
+  );
+
+  if (
+    featuredIds.length > 0 &&
+    excursionesResult.status === 'fulfilled'
+  ) {
+    const have = new Set(excursiones.map((e) => e.id));
+    const missing = featuredIds.filter((id) => !have.has(id));
+    if (missing.length > 0) {
+      const extra = await fetchExcursionsByIds(missing);
+      if (extra.length > 0) {
+        const byId = new Map<number, Excursion>();
+        for (const e of excursiones) {
+          byId.set(e.id, e);
+        }
+        for (const e of extra) {
+          byId.set(e.id, e);
+        }
+        excursiones = sortExcursionsByTitleAsc([...byId.values()]);
+      }
+    }
+  }
 
   // Fallback URLs
   const defaultUrl = (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || '';
@@ -80,9 +148,7 @@ export default async function Home() {
   const apiBaseForImages =
     defaultUrl || "https://back.mayaadrenaline.com.mx";
   const popularItems = buildFeaturedExperienceItems(
-    Array.isArray(fetchedSettings.featured_excursion_ids)
-      ? fetchedSettings.featured_excursion_ids
-      : [],
+    featuredIds,
     excursiones,
     apiBaseForImages
   );

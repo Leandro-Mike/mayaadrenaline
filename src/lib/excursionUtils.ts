@@ -86,8 +86,11 @@ export function buildFeaturedExperienceItems(
 	const base = apiBase.replace(/\/$/, "");
 	const out: FeaturedExperienceItem[] = [];
 	for (const rawId of ids) {
-		const id = Number(rawId);
-		if (!id) {
+		const id =
+			typeof rawId === "number" && Number.isFinite(rawId)
+				? rawId
+				: parseInt(String(rawId), 10);
+		if (!Number.isFinite(id) || id < 1) {
 			continue;
 		}
 		const e = byId.get(id);
