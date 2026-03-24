@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Montserrat, Roboto, Nunito } from "next/font/google"
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import AccommodationPromoPopup from "../components/AccommodationPromoPopup";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,6 +53,7 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
+        <AccommodationPromoPopup />
       </body>
     </html>
   );
