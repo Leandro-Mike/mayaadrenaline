@@ -19,9 +19,11 @@ interface Excursion {
         rendered: string;
     };
     precio: string;
+    precio_menor?: string;
     tagline: string;
     duration: string; // Added duration
     precios_adicionales?: { etiqueta: string; precio: string }[];
+    precios_complementarios_por_persona?: boolean;
     servicios_incluidos?: string[];
     informacion_adicional?: { titulo: string; contenido: string }[];
     gallery_images?: { id: number; url: string; alt: string }[];
@@ -201,6 +203,8 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
         ? excursion.precios_adicionales
         : [];
     const tituloReserva = stripHtml(excursion.title.rendered);
+    const preciosComplPorPersona =
+        excursion.precios_complementarios_por_persona === false ? false : true;
 
     return (
         <div className="font-sans bg-[#F4F1E8] min-h-screen">
@@ -294,9 +298,16 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
                         <ReservationForm
                             excursionTitle={tituloReserva}
                             excursionPrice={excursion.precio || '0'}
+                            precioMenor={
+                                excursion.precio_menor != null &&
+                                String(excursion.precio_menor).trim() !== ''
+                                    ? String(excursion.precio_menor)
+                                    : ''
+                            }
                             whatsappNumber={String(settings.whatsapp_number || '')}
                             messageTemplate={String(settings.whatsapp_template || '')}
                             preciosAdicionales={preciosAdicionales}
+                            preciosComplementariosPorPersona={preciosComplPorPersona}
                         />
                     </div>
                 </div>

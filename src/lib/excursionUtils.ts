@@ -17,6 +17,27 @@ export function stripHtml(html: string): string {
 		.trim();
 }
 
+const ETIQUETA_TARIFA_MENOR_RE =
+	/(menor|menores|niño|niños|niña|niñas|infant|infantil|child|children)/i;
+
+export function splitPreciosAdicionalesMenoresYResto(
+	rows: Array<{ etiqueta: string; precio: string }>
+): {
+	menores: Array<{ etiqueta: string; precio: string }>;
+	resto: Array<{ etiqueta: string; precio: string }>;
+} {
+	const menores: Array<{ etiqueta: string; precio: string }> = [];
+	const resto: Array<{ etiqueta: string; precio: string }> = [];
+	for (const r of rows) {
+		if (ETIQUETA_TARIFA_MENOR_RE.test(String(r.etiqueta || ""))) {
+			menores.push(r);
+		} else {
+			resto.push(r);
+		}
+	}
+	return { menores, resto };
+}
+
 export function parseMoney(value: string | number | undefined | null): number {
 	if (value === undefined || value === null) {
 		return 0;
