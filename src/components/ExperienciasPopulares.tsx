@@ -3,12 +3,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { FeaturedExperienceItem } from '@/lib/excursionUtils';
 
-const ArrowIcon = () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="opacity-70 group-hover:opacity-100 transition-opacity">
-        <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-);
-
 type Props = {
     items: FeaturedExperienceItem[];
 };
@@ -31,25 +25,17 @@ export default function ExperienciasPopulares({ items }: Props) {
                                 <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
                                     <Image
                                         src={exp.image}
-                                        alt={exp.title}
+                                        alt=""
                                         fill
                                         className="object-cover"
+                                        role="presentation"
                                     />
                                 </div>
                             ) : (
                                 <div className="w-16 h-16 rounded-lg shrink-0 bg-white/10" aria-hidden />
                             )}
 
-                            <div className="flex-1 text-left">
-                                <h4 className="font-bold text-lg font-nunito italic heading-font">{exp.title}</h4>
-                                {exp.subtitle ? (
-                                    <p className="text-sm font-light text-gray-300 font-montserrat">{exp.subtitle}</p>
-                                ) : null}
-                            </div>
-
-                            <div className="bg-white/10 p-2 rounded-full group-hover:bg-white/20 transition-colors shrink-0">
-                                <ArrowIcon />
-                            </div>
+                            <h4 className="flex-1 text-left font-bold text-lg font-nunito italic heading-font">{exp.title}</h4>
                         </Link>
                     ))}
                 </div>

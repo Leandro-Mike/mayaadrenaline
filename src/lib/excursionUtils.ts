@@ -52,7 +52,6 @@ export function parseMoney(value: string | number | undefined | null): number {
 
 export type FeaturedExperienceItem = {
 	title: string;
-	subtitle: string;
 	href: string;
 	image?: string;
 };
@@ -61,8 +60,6 @@ type ExcursionForFeatured = {
 	id: number;
 	slug: string;
 	title: { rendered: string };
-	excerpt: { rendered: string };
-	tagline?: string;
 	_embedded?: {
 		"wp:featuredmedia"?: Array<{
 			source_url: string;
@@ -101,12 +98,8 @@ export function buildFeaturedExperienceItems(
 		if (img && img.startsWith("/")) {
 			img = `${base}${img}`;
 		}
-		const subtitle =
-			stripHtml(e.excerpt?.rendered || "") ||
-			String(e.tagline || "").trim();
 		out.push({
 			title: stripHtml(e.title.rendered),
-			subtitle,
 			href: `/excursiones/${e.slug}`,
 			image: img || undefined,
 		});
