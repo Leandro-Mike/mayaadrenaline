@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  output: 'export', // Enable static export for traditional hosting
+  // output: 'export', // Enable static export for traditional hosting (Disables middleware and ISR)
   trailingSlash: true, // Generate pages as directories (e.g. /about/index.html) instead of files (e.g. /about.html)
   staticPageGenerationTimeout: 1000,
 };

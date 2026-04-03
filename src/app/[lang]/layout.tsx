@@ -38,6 +38,10 @@ export const metadata: Metadata = {
   description: "Descubre las mejores excursiones en la Riviera Maya.",
 };
 
+export function generateStaticParams() {
+  return [{ lang: 'es' }, { lang: 'en' }];
+}
+
 export default async function RootLayout({
   children,
   params,
