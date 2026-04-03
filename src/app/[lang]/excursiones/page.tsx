@@ -43,10 +43,10 @@ interface Excursion {
 }
 
 // Fetch categories from WP API
-async function getCategories(): Promise<Category[]> {
+async function getCategories(lang: string): Promise<Category[]> {
     try {
         const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
-        const res = await fetch(`${apiUrl}/wp-json/wp/v2/categoria_excursion?per_page=100`, {
+        const res = await fetch(`${apiUrl}/wp-json/wp/v2/categoria_excursion?per_page=100&lang=${lang}`, {
             next: { revalidate: 60 },
         });
 
@@ -67,10 +67,10 @@ async function getCategories(): Promise<Category[]> {
 }
 
 // Fetch activities from WP API
-async function getActivities(): Promise<Activity[]> {
+async function getActivities(lang: string): Promise<Activity[]> {
     try {
         const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
-        const res = await fetch(`${apiUrl}/wp-json/wp/v2/actividad_excursion?per_page=100`, {
+        const res = await fetch(`${apiUrl}/wp-json/wp/v2/actividad_excursion?per_page=100&lang=${lang}`, {
             next: { revalidate: 60 },
         });
 
@@ -88,10 +88,10 @@ async function getActivities(): Promise<Activity[]> {
 }
 
 // Fetch Excursions from WP API
-async function getExcursiones(): Promise<Excursion[]> {
+async function getExcursiones(lang: string): Promise<Excursion[]> {
     try {
         const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
-        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?_embed&per_page=100&orderby=menu_order&order=asc`, {
+        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?_embed&per_page=100&orderby=menu_order&order=asc&lang=${lang}`, {
             next: { revalidate: 60 },
         });
 
@@ -111,10 +111,10 @@ async function getExcursiones(): Promise<Excursion[]> {
 
 
 // Fetch Settings
-async function getSettings(): Promise<Settings> {
+async function getSettings(lang: string): Promise<Settings> {
     const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
     try {
-        const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
+        const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings?lang=${lang}`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
         return res.json();
     } catch (error) {
@@ -123,11 +123,14 @@ async function getSettings(): Promise<Settings> {
     }
 }
 
-export default async function ExcursionesPage() {
-    const categoriesData = getCategories();
-    const activitiesData = getActivities();
-    const excursionesData = getExcursiones();
-    const settingsData = getSettings();
+type Props = { params: Promise<{ lang: string }> };
+
+export default async function ExcursionesPage({ params }: Props) {
+    const { lang } = await params;
+    const categoriesData = getCategories(lang);
+    const activitiesData = getActivities(lang);
+    const excursionesData = getExcursiones(lang);
+    const settingsData = getSettings(lang);
 
     const [categories, activities, excursiones, settings] = await Promise.all([
         categoriesData,

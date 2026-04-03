@@ -99,11 +99,11 @@ export async function generateStaticParams() {
 }
 
 // Fetch single excursion
-async function getExcursion(slug: string): Promise<Excursion | null> {
+async function getExcursion(slug: string, lang: string): Promise<Excursion | null> {
     try {
         const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
         // Ensure to fetch all custom fields if not included by default, but standard REST should include registered fields
-        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?slug=${slug}&_embed`, {
+        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?slug=${slug}&_embed&lang=${lang}`, {
             next: { revalidate: 60 },
         });
 
@@ -129,10 +129,10 @@ async function getExcursion(slug: string): Promise<Excursion | null> {
 }
 
 // Fetch Settings
-async function getSettings(): Promise<Settings> {
+async function getSettings(lang: string): Promise<Settings> {
     try {
         const apiUrl = process.env.WP_BUILD_URL || process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
-        const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, {
+        const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings?lang=${lang}`, {
             next: { revalidate: 60 },
         });
         if (!res.ok) return { whatsapp_number: '', whatsapp_template: '' };
@@ -144,9 +144,9 @@ async function getSettings(): Promise<Settings> {
 }
 
 // Generate Metadata
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
-    const excursion = await getExcursion(slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string, lang: string }> }) {
+    const { slug, lang } = await params;
+    const excursion = await getExcursion(slug, lang);
 
     if (!excursion) {
         return {
@@ -163,10 +163,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 
-export default async function ExcursionPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
-    const excursionData = getExcursion(slug);
-    const settingsData = getSettings();
+export default async function ExcursionPage({ params }: { params: Promise<{ slug: string, lang: string }> }) {
+    const { slug, lang } = await params;
+    const excursionData = getExcursion(slug, lang);
+    const settingsData = getSettings(lang);
 
     const [excursion, settings] = await Promise.all([excursionData, settingsData]);
 

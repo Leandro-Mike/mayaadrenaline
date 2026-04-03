@@ -11,11 +11,11 @@ interface ExcursionPrecio {
     duration: string; // Added duration
 }
 
-async function getExcursionPrices(): Promise<ExcursionPrecio[]> {
+async function getExcursionPrices(lang: string): Promise<ExcursionPrecio[]> {
     try {
         const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
         // Added duration to fields
-        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100&orderby=menu_order&order=asc&_fields=id,title,precio,slug,duration`, {
+        const res = await fetch(`${apiUrl}/wp-json/wp/v2/excursion?per_page=100&orderby=menu_order&order=asc&_fields=id,title,precio,slug,duration&lang=${lang}`, {
             next: { revalidate: 300 },
         });
 
@@ -42,10 +42,10 @@ export const metadata = {
 
 import { Settings } from '@/types/settings';
 
-async function getSettings(): Promise<Settings> {
+async function getSettings(lang: string): Promise<Settings> {
     const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
     try {
-        const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, { next: { revalidate: 60 } });
+        const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings?lang=${lang}`, { next: { revalidate: 60 } });
         if (!res.ok) throw new Error("Failed to fetch settings");
         return res.json();
     } catch (error) {
@@ -53,9 +53,12 @@ async function getSettings(): Promise<Settings> {
     }
 }
 
-export default async function PreciosPage() {
-    const excursionsData = getExcursionPrices();
-    const settingsData = getSettings();
+type Props = { params: Promise<{ lang: string }> };
+
+export default async function PreciosPage({ params }: Props) {
+    const { lang } = await params;
+    const excursionsData = getExcursionPrices(lang);
+    const settingsData = getSettings(lang);
 
     const [excursions, settings] = await Promise.all([excursionsData, settingsData]);
 

@@ -52,10 +52,10 @@ function normalizeFeaturedExcursionIds(raw: unknown): number[] {
     ),
   ];
 }
-async function getSettings(): Promise<Settings> {
+async function getSettings(lang: string): Promise<Settings> {
   const apiUrl = getWpApiBase();
   try {
-    const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings`, {
+    const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/settings?lang=${lang}`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) throw new Error("Failed to fetch settings");
@@ -66,10 +66,10 @@ async function getSettings(): Promise<Settings> {
   }
 }
 
-async function getExcursiones(): Promise<Excursion[]> {
+async function getExcursiones(lang: string): Promise<Excursion[]> {
   const apiUrl = getWpApiBase();
   const res = await fetch(
-    `${apiUrl}/wp-json/wp/v2/excursion?per_page=100&_embed&orderby=menu_order&order=asc`,
+    `${apiUrl}/wp-json/wp/v2/excursion?per_page=100&_embed&orderby=menu_order&order=asc&lang=${lang}`,
     {
       next: { revalidate: 10 },
     }
@@ -83,14 +83,14 @@ async function getExcursiones(): Promise<Excursion[]> {
 }
 
 /** Excursiones que faltan en el listado (p. ej. están más allá de la primera página). */
-async function fetchExcursionsByIds(ids: number[]): Promise<Excursion[]> {
+async function fetchExcursionsByIds(ids: number[], lang: string): Promise<Excursion[]> {
   const unique = [...new Set(ids.filter((id) => id > 0))];
   if (unique.length === 0) {
     return [];
   }
   const apiUrl = getWpApiBase();
   const res = await fetch(
-    `${apiUrl}/wp-json/wp/v2/excursion?include=${unique.join(",")}&_embed`,
+    `${apiUrl}/wp-json/wp/v2/excursion?include=${unique.join(",")}&_embed&lang=${lang}`,
     { next: { revalidate: 10 } }
   );
   if (!res.ok) {
@@ -100,9 +100,12 @@ async function fetchExcursionsByIds(ids: number[]): Promise<Excursion[]> {
   return Array.isArray(data) ? (data as Excursion[]) : [];
 }
 
-export default async function Home() {
-  const settingsData = getSettings();
-  const excursionesData = getExcursiones();
+type Props = { params: Promise<{ lang: string }> };
+
+export default async function Home({ params }: Props) {
+  const { lang } = await params;
+  const settingsData = getSettings(lang);
+  const excursionesData = getExcursiones(lang);
 
   // Fetch in parallel. Handle excursiones error gracefully to allow render
   const [settings, excursionesResult] = await Promise.allSettled([settingsData, excursionesData]);
@@ -123,7 +126,7 @@ export default async function Home() {
     const have = new Set(excursiones.map((e) => e.id));
     const missing = featuredIds.filter((id) => !have.has(id));
     if (missing.length > 0) {
-      const extra = await fetchExcursionsByIds(missing);
+      const extra = await fetchExcursionsByIds(missing, lang);
       if (extra.length > 0) {
         const byId = new Map<number, Excursion>();
         for (const e of excursiones) {
