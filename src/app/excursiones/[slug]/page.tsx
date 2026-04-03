@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import ReservationForm from '@/components/ReservationForm';
 import ExcursionGallery from '@/components/ExcursionGallery';
 import ExcursionActivities from '@/components/ExcursionActivities';
+import { stripHtml } from '@/lib/excursionUtils';
 
 interface Excursion {
     id: number;
@@ -18,8 +19,13 @@ interface Excursion {
         rendered: string;
     };
     precio: string;
+    precio_menor?: string;
     tagline: string;
     duration: string; // Added duration
+    precios_adicionales?: { etiqueta: string; precio: string }[];
+    precios_complementarios_por_persona?: boolean;
+    servicios_incluidos?: string[];
+    informacion_adicional?: { titulo: string; contenido: string }[];
     gallery_images?: { id: number; url: string; alt: string }[];
     _embedded?: {
         "wp:featuredmedia"?: Array<{
@@ -183,6 +189,22 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
         imagen: act.imagen || null
     }));
 
+    const serviciosList = Array.isArray(excursion.servicios_incluidos)
+        ? excursion.servicios_incluidos.filter((s) => String(s).trim() !== '')
+        : [];
+    const infoAdicionalList = Array.isArray(excursion.informacion_adicional)
+        ? excursion.informacion_adicional.filter(
+              (b) =>
+                  String(b?.titulo || '').trim() !== '' ||
+                  String(b?.contenido || '').trim() !== ''
+          )
+        : [];
+    const preciosAdicionales = Array.isArray(excursion.precios_adicionales)
+        ? excursion.precios_adicionales
+        : [];
+    const tituloReserva = stripHtml(excursion.title.rendered);
+    const preciosComplPorPersona =
+        excursion.precios_complementarios_por_persona === false ? false : true;
 
     return (
         <div className="font-sans bg-[#F4F1E8] min-h-screen">
@@ -234,15 +256,58 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
                             className="font-montserrat text-lg text-gray-700 leading-relaxed italic space-y-4"
                             dangerouslySetInnerHTML={{ __html: excursion.content.rendered }}
                         />
+
+                        {serviciosList.length > 0 ? (
+                            <div className="space-y-3">
+                                <h3 className="text-2xl font-extrabold text-ma-verdeazul font-nunito not-italic">
+                                    Servicios incluidos
+                                </h3>
+                                <ul className="list-disc list-inside font-montserrat text-base text-gray-800 space-y-2 not-italic">
+                                    {serviciosList.map((s, i) => (
+                                        <li key={`srv-${i}`}>{s}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ) : null}
+
+                        {infoAdicionalList.length > 0 ? (
+                            <div className="space-y-3">
+                                <h3 className="text-2xl font-extrabold text-ma-verdeazul font-nunito not-italic">
+                                    Información adicional
+                                </h3>
+                                <ul className="list-disc list-inside font-montserrat text-base text-gray-800 space-y-3 not-italic">
+                                    {infoAdicionalList.map((b, i) => (
+                                        <li key={`info-${i}`} className="leading-relaxed">
+                                            {b.titulo ? (
+                                                <strong className="text-ma-verdeazul">{b.titulo}</strong>
+                                            ) : null}
+                                            {b.contenido ? (
+                                                <span className="block mt-1 whitespace-pre-line">
+                                                    {b.contenido}
+                                                </span>
+                                            ) : null}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ) : null}
                     </div>
 
                     {/* Right Column: Reservation Form */}
                     <div className="lg:sticky lg:top-32">
                         <ReservationForm
-                            excursionTitle={excursion.title.rendered}
+                            excursionTitle={tituloReserva}
                             excursionPrice={excursion.precio || '0'}
+                            precioMenor={
+                                excursion.precio_menor != null &&
+                                String(excursion.precio_menor).trim() !== ''
+                                    ? String(excursion.precio_menor)
+                                    : ''
+                            }
                             whatsappNumber={String(settings.whatsapp_number || '')}
                             messageTemplate={String(settings.whatsapp_template || '')}
+                            preciosAdicionales={preciosAdicionales}
+                            preciosComplementariosPorPersona={preciosComplPorPersona}
                         />
                     </div>
                 </div>

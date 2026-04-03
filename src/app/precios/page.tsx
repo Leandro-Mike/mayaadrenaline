@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import PriceTable from '@/components/PriceTable'; // Import Client Component
+import { compareByExcursionTitlePlain } from '@/lib/excursionSort';
 
 
 interface ExcursionPrecio {
