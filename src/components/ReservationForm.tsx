@@ -198,41 +198,32 @@ export default function ReservationForm({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="relative">
                         <label className="block text-xs text-ma-gris-claro/90 font-montserrat mb-1.5">Adultos</label>
-                        <select
-                            value={adults}
-                            onChange={(e) => setAdults(parseInt(e.target.value, 10))}
-                            className="w-full bg-[#f4f1e8] text-gray-800 px-6 py-4 rounded-full focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat italic appearance-none cursor-pointer"
-                        >
-                            {Array.from({ length: 11 }, (_, i) => i)
-                                .filter((n) => n >= 1)
-                                .map((num) => (
-                                <option key={num} value={num}>
-                                    {num} {num === 1 ? 'adulto' : 'adultos'}
-                                </option>
-                            ))}
-                        </select>
-                        <div className="absolute right-4 bottom-3 text-gray-500 pointer-events-none flex flex-col items-center">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22H22L12 2Z" /></svg>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="rotate-180"><path d="M12 2L2 22H22L12 2Z" /></svg>
-                        </div>
+                        <input
+                            type="number"
+                            min="1"
+                            value={adults === 0 ? '' : adults}
+                            onChange={(e) => {
+                                const val = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
+                                setAdults(isNaN(val) ? 0 : val);
+                            }}
+                            onBlur={() => setAdults(Math.max(1, adults))}
+                            onFocus={(e) => e.target.select()}
+                            className="w-full bg-[#f4f1e8] text-gray-800 px-6 py-4 rounded-full focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat italic cursor-pointer"
+                        />
                     </div>
                     <div className="relative">
                         <label className="block text-xs text-ma-gris-claro/90 font-montserrat mb-1.5">Menores</label>
-                        <select
+                        <input
+                            type="number"
+                            min="0"
                             value={minors}
-                            onChange={(e) => setMinors(parseInt(e.target.value, 10))}
-                            className="w-full bg-[#f4f1e8] text-gray-800 px-6 py-4 rounded-full focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat italic appearance-none cursor-pointer"
-                        >
-                            {Array.from({ length: 11 }, (_, i) => i).map((num) => (
-                                <option key={num} value={num}>
-                                    {num} {num === 1 ? 'menor' : 'menores'}
-                                </option>
-                            ))}
-                        </select>
-                        <div className="absolute right-4 bottom-3 text-gray-500 pointer-events-none flex flex-col items-center">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22H22L12 2Z" /></svg>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" className="rotate-180"><path d="M12 2L2 22H22L12 2Z" /></svg>
-                        </div>
+                            onChange={(e) => {
+                                const val = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
+                                setMinors(isNaN(val) ? 0 : Math.max(0, val));
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            className="w-full bg-[#f4f1e8] text-gray-800 px-6 py-4 rounded-full focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat italic cursor-pointer"
+                        />
                     </div>
                 </div>
                 <p className="text-xs text-gray-400 -mt-2 font-montserrat">
