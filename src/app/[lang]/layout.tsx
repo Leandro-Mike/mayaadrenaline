@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Montserrat, Roboto, Nunito } from "next/font/google";
-import "./globals.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import AccommodationPromoPopup from "../components/AccommodationPromoPopup";
+import "../globals.css";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import AccommodationPromoPopup from "../../components/AccommodationPromoPopup";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,13 +38,16 @@ export const metadata: Metadata = {
   description: "Descubre las mejores excursiones en la Riviera Maya.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ lang: string }>
 }>) {
+  const { lang } = await params;
   return (
-    <html lang="es">
+    <html lang={lang}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${montserrat.variable} ${roboto.variable} ${nunito.variable} antialiased flex flex-col min-h-screen`}
       >

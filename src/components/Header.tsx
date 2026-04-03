@@ -4,9 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import BotonCTA from './botonCTA';
 import { motion, AnimatePresence } from 'framer-motion';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
     const pathname = usePathname();
+    const currentLang = pathname.startsWith('/en') ? 'en' : 'es';
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -34,10 +36,9 @@ export default function Header() {
     }, [isMenuOpen]);
 
     const navLinks = [
-        { href: '/nosotros', label: 'Conocenos' },
-        { href: '/excursiones', label: 'Experiencias' },
-        { href: '/contacto', label: 'Hablemos' },
-        { href: '/contacto', label: 'Otros servicios' },
+        { href: `/${currentLang}/nosotros`, label: 'Conocenos' },
+        { href: `/${currentLang}/excursiones`, label: 'Experiencias' },
+        { href: `/${currentLang}/contacto`, label: 'Hablemos' },
     ];
 
     return (
@@ -51,7 +52,7 @@ export default function Header() {
                 {/* Left Side: Logo + Desktop Navigation */}
                 <div className="flex items-center gap-8">
                     {/* Logo */}
-                    <Link href="/" className="relative z-50">
+                    <Link href={`/${currentLang}`} className="relative z-50">
                         <img
                             className="w-32 md:w-40 lg:w-48 transition-all duration-300"
                             src={`https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/logo.svg`}
@@ -76,6 +77,9 @@ export default function Header() {
 
                 {/* Right Side: CTA + Mobile Toggle */}
                 <div className="flex items-center gap-4">
+                    
+                    <LanguageSwitcher />
+
                     {/* Desktop CTA */}
                     <div className="hidden md:block">
                         <BotonCTA />
