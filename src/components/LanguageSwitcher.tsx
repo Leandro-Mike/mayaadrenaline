@@ -13,19 +13,25 @@ export default function LanguageSwitcher() {
   const switchLanguage = (newLang: string) => {
     if (newLang === currentLang) return;
     
-    // Extract the rest of the URL after the language prefix
-    // Ex: /es/excursiones -> /excursiones
     const segments = pathname.split('/');
+    
+    // Prevent 404 on single excursion pages due to translated slugs
+    if (segments.length >= 4 && segments[2] === 'excursiones') {
+      const newPath = `/${newLang}/excursiones`;
+      startTransition(() => {
+        router.push(newPath);
+      });
+      return;
+    }
+
     if (segments[1] === 'es' || segments[1] === 'en') {
       segments[1] = newLang;
     } else {
-      // Unlikely due to middleware, but fallback
       segments.splice(1, 0, newLang);
     }
     const newPath = segments.join('/');
 
     startTransition(() => {
-      // Use window.location as fallback if router.push has issues with i18n
       router.push(newPath || '/');
     });
   };
