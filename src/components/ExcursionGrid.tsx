@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useParams } from 'next/navigation';
 import { sortExcursionsByTitleAsc } from '@/lib/excursionSort';
 
 
@@ -55,6 +56,8 @@ function matchesFilterQuery(name: string, slug: string, q: string) {
 }
 
 export default function ExcursionGrid({ excursiones, categories, activities }: ExcursionGridProps) {
+    const params = useParams();
+    const currentLang = params?.lang || 'es';
     const [activeFilter, setActiveFilter] = useState<number | 'all'>('all');
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [filterQuery, setFilterQuery] = useState('');
@@ -318,7 +321,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
                                 transition={{ duration: 0.3 }}
                                 className="group relative rounded-[40px] overflow-hidden h-[500px] shadow-lg cursor-pointer bg-[#F4F1E8]" // Using beige bg
                             >
-                                <Link href={`/excursiones/${excursion.slug}`} className="block w-full h-full relative">
+                                <Link href={`/${currentLang}/excursiones/${excursion.slug}`} className="block w-full h-full relative">
 
                                     {/* Top Content (Visible on Hover) */}
                                     <div className="absolute top-0 left-0 w-full h-[45%] p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 z-10 flex flex-col justify-start">

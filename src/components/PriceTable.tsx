@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useParams } from 'next/navigation';
 
 interface ExcursionPrecio {
     id: number;
@@ -17,6 +18,8 @@ interface PriceTableProps {
 }
 
 export default function PriceTable({ initialExcursions }: PriceTableProps) {
+    const params = useParams();
+    const currentLang = params?.lang || 'es';
     const [excursions, setExcursions] = useState(initialExcursions);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
 
@@ -82,7 +85,7 @@ export default function PriceTable({ initialExcursions }: PriceTableProps) {
                                 exit={{ opacity: 0 }}
                                 className="hover:bg-gray-50 transition-colors group relative"
                             >
-                                <Link href={`/excursiones/${exc.slug}`} className="flex flex-col md:grid md:grid-cols-12 w-full items-start md:items-center px-6 py-6 gap-3 md:gap-0">
+                                <Link href={`/${currentLang}/excursiones/${exc.slug}`} className="flex flex-col md:grid md:grid-cols-12 w-full items-start md:items-center px-6 py-6 gap-3 md:gap-0">
 
                                     {/* Título */}
                                     <div className="w-full md:col-span-6 md:pr-4 font-bold md:font-medium text-gray-800 text-xl md:text-lg group-hover:text-ma-verdeazul transition-colors">

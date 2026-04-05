@@ -7,6 +7,7 @@ import useEmblaCarousel from 'embla-carousel-react'
 import AutoScroll from 'embla-carousel-auto-scroll'
 import Fade from 'embla-carousel-fade'
 import Image from 'next/image'
+import { useParams } from 'next/navigation';
 
 // Definir la forma de los datos de Excursión desde la API de WP
 export interface Excursion {
@@ -30,6 +31,8 @@ export interface Excursion {
 }
 
 export default function Carousel({ excursiones }: { excursiones: Excursion[] }) {
+    const params = useParams();
+    const currentLang = params?.lang || 'es';
     const [emblaRef, emblaApi] = useEmblaCarousel(
         { loop: true, align: 'start', dragFree: true },
         [AutoScroll({ playOnInit: true, speed: 1, stopOnInteraction: true, stopOnMouseEnter: true })]
@@ -86,7 +89,7 @@ export default function Carousel({ excursiones }: { excursiones: Excursion[] }) 
                                     key={excursion.id}
                                     className={`embla__slide relative flex-[0_0_100%] md:flex-[0_0_45%] md:mx-4 h-[400px] md:h-[500px] rounded-[30px] md:rounded-[40px] overflow-hidden shadow-xl transition-all duration-500 ease-out group ${index % 2 === 0 ? 'mt-0' : 'md:mt-24 mt-0'}`}
                                 >
-                                    <Link href={`/excursiones/${excursion.slug}`} className="absolute inset-0 z-20" aria-label={`Ver ${excursion.title.rendered}`}>
+                                    <Link href={`/${currentLang}/excursiones/${excursion.slug}`} className="absolute inset-0 z-20" aria-label={`Ver ${excursion.title.rendered}`}>
                                         <span className="sr-only">Ver {excursion.title.rendered}</span>
                                     </Link>
 
