@@ -1,4 +1,4 @@
-﻿
+
 import ContactForm from '@/components/ContactForm';
 import { Settings } from '@/types/settings';
 
@@ -45,7 +45,7 @@ export default async function ContactoPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D1D]/90 via-transparent to-black/30"></div>
                 </div>
 
-                <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-16 items-center text-center text-white">
+                <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center text-white pb-20 pt-32">
                     <h1 className="text-5xl md:text-7xl font-extrabold font-nunito mb-6 drop-shadow-xl uppercase tracking-wider">
                         Hablemos
                     </h1>

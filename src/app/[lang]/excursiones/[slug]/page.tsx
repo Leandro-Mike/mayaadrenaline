@@ -21,6 +21,7 @@ interface Excursion {
     precio: string;
     precio_menor?: string;
     tagline: string;
+    subtitulo?: string;
     duration: string; // Added duration
     precios_adicionales?: { etiqueta: string; precio: string }[];
     precios_complementarios_por_persona?: boolean;
@@ -248,9 +249,10 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
 
                     {/* Left Column: Description */}
                     <div className="space-y-8">
-                        <h2 className="text-4xl md:text-5xl font-extrabold text-ma-verdeazul font-nunito leading-tight">
-                            Un día <br /> de aventura
-                        </h2>
+                        <h2 
+                            className="text-4xl md:text-5xl font-extrabold text-ma-verdeazul font-nunito leading-tight"
+                            dangerouslySetInnerHTML={{ __html: excursion.subtitulo || 'Un día <br /> de aventura' }}
+                        />
 
                         <div
                             className="font-montserrat text-lg text-gray-700 leading-relaxed italic space-y-4"
