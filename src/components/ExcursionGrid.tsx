@@ -109,9 +109,25 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
         );
     }, [excursionesOrdenadas, activeFilter]);
 
+    const isEn = currentLang === 'en';
+
     const activeFilterName = activeFilter === 'all'
-        ? 'Todas'
-        : (categories.find(c => c.id === activeFilter)?.name || activities.find(a => a.id === activeFilter)?.name || 'Todas');
+        ? (isEn ? 'All' : 'Todas')
+        : (categories.find(c => c.id === activeFilter)?.name || activities.find(a => a.id === activeFilter)?.name || (isEn ? 'All' : 'Todas'));
+
+    const t = {
+        title: isEn ? 'Explore our offerings' : 'Explora nuestras propuestas',
+        filterBy: isEn ? 'Filter by category' : 'Filtrar por categoría',
+        filters: isEn ? 'Filters' : 'Filtros',
+        searchPlaceholder: isEn ? 'Search category or activity…' : 'Buscar categoría o actividad…',
+        noMatches: isEn ? 'No matches. Try different words.' : 'No hay coincidencias. Prueba con otras palabras.',
+        cats: isEn ? 'Categories' : 'Categorías',
+        noCats: isEn ? 'No category matches.' : 'Ninguna categoría coincide.',
+        acts: isEn ? 'Activities' : 'Actividades',
+        noActs: isEn ? 'No activity matches.' : 'Ninguna actividad coincide.',
+        all: isEn ? 'All' : 'Todas',
+        emptyExcursions: isEn ? 'No excursions found in this category.' : 'No se encontraron excursiones en esta categoría.',
+    };
 
 
     return (
@@ -132,7 +148,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
             {/* Header and Filter */}
             <div className={`flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 gap-6 relative ${isFilterOpen ? 'z-50' : 'z-30'}`}>
                 <h2 className="text-3xl md:text-4xl font-extrabold text-ma-verdeazul font-nunito text-center md:text-left leading-tight">
-                    Explora nuestras propuestas
+                    {t.title}
                 </h2>
 
                 <div ref={filterContainerRef} className="relative w-full md:w-auto flex justify-center md:justify-end">
@@ -140,7 +156,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
                         onClick={() => setIsFilterOpen(!isFilterOpen)}
                         className="flex items-center justify-between md:justify-start gap-4 bg-ma-verdeazul text-white px-6 md:px-8 py-3 rounded-full hover:bg-opacity-90 transition-all font-montserrat italic min-w-[200px] md:min-w-0 shadow-lg"
                     >
-                        <span className="truncate max-w-[150px]">{activeFilter === 'all' ? 'Filtrar por categoría' : activeFilterName}</span>
+                        <span className="truncate max-w-[150px]">{activeFilter === 'all' ? t.filterBy : activeFilterName}</span>
                         <svg className={`transition-transform duration-300 ${isFilterOpen ? 'rotate-180' : ''}`} width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 4H20L12 14L4 4Z" fill="currentColor" opacity="0.5" />
                             <path d="M12 14V20L15 22V14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -159,7 +175,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
                                            md:translate-x-0"
                             >
                                 <div className="flex justify-between items-center gap-3 mb-3 pb-2 border-b border-white/10">
-                                    <h4 className="text-white font-bold font-nunito text-sm md:text-base">Filtros</h4>
+                                    <h4 className="text-white font-bold font-nunito text-sm md:text-base">{t.filters}</h4>
                                     <button type="button" onClick={() => setIsFilterOpen(false)} className="md:hidden text-white/60 hover:text-white text-lg leading-none p-1" aria-label="Cerrar">
                                         ✕
                                     </button>
@@ -183,7 +199,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
                                             type="search"
                                             value={filterQuery}
                                             onChange={(e) => setFilterQuery(e.target.value)}
-                                            placeholder="Buscar categoría o actividad…"
+                                            placeholder={t.searchPlaceholder}
                                             autoComplete="off"
                                             className="w-full rounded-lg bg-white/10 border border-white/20 pl-9 pr-3 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-ma-amarillo/50 focus:border-ma-amarillo/60"
                                         />
@@ -193,15 +209,15 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
                                 <div className="max-h-[min(55vh,24rem)] overflow-y-auto overscroll-contain pr-1 space-y-4">
                                     {noSearchResults && (
                                         <p className="text-xs text-white/55 text-center py-4 font-montserrat">
-                                            No hay coincidencias. Prueba con otras palabras.
+                                            {t.noMatches}
                                         </p>
                                     )}
 
                                     {categories.length > 0 && !noSearchResults && (
                                         <div>
-                                            <p className="text-[10px] uppercase tracking-wider text-white/45 font-semibold mb-2">Categorías</p>
+                                            <p className="text-[10px] uppercase tracking-wider text-white/45 font-semibold mb-2">{t.cats}</p>
                                             {filteredCategories.length === 0 && hasSearch ? (
-                                                <p className="text-[11px] text-white/45 italic py-1">Ninguna categoría coincide.</p>
+                                                <p className="text-[11px] text-white/45 italic py-1">{t.noCats}</p>
                                             ) : (
                                             <div className="grid grid-cols-2 gap-1.5">
                                                 {filteredCategories.map(cat => {
@@ -243,9 +259,9 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
 
                                     {activities.length > 0 && !noSearchResults && (
                                         <div>
-                                            <p className="text-[10px] uppercase tracking-wider text-white/45 font-semibold mb-2">Actividades</p>
+                                            <p className="text-[10px] uppercase tracking-wider text-white/45 font-semibold mb-2">{t.acts}</p>
                                             {filteredActivities.length === 0 && hasSearch ? (
-                                                <p className="text-[11px] text-white/45 italic py-1">Ninguna actividad coincide.</p>
+                                                <p className="text-[11px] text-white/45 italic py-1">{t.noActs}</p>
                                             ) : (
                                             <div className="grid grid-cols-2 gap-1.5">
                                                 {filteredActivities.map(act => {
@@ -293,7 +309,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
                                         onClick={() => { setActiveFilter('all'); setIsFilterOpen(false); }}
                                         className={`shrink-0 text-[11px] md:text-xs font-montserrat uppercase tracking-wide transition-colors px-3 py-1.5 rounded-md border ${activeFilter === 'all' ? 'border-ma-amarillo text-ma-amarillo' : 'border-white/20 text-white/70 hover:text-white hover:border-white/50'}`}
                                     >
-                                        Todas
+                                        {t.all}
                                     </button>
                                 </div>
                             </motion.div>
@@ -377,7 +393,7 @@ export default function ExcursionGrid({ excursiones, categories, activities }: E
 
             {filteredExcursiones.length === 0 && (
                 <div className="text-center py-20 opacity-60">
-                    <p>No se encontraron excursiones en esta categoría.</p>
+                    <p>{t.emptyExcursions}</p>
                 </div>
             )}
 

@@ -61,6 +61,7 @@ export default async function PreciosPage({ params }: Props) {
     const settingsData = getSettings(lang);
 
     const [excursions, settings] = await Promise.all([excursionsData, settingsData]);
+    const isEn = lang === 'en';
 
     const heroImage = settings.precios_hero_image && settings.precios_hero_image !== ''
         ? `url('${settings.precios_hero_image}')`
@@ -79,7 +80,7 @@ export default async function PreciosPage({ params }: Props) {
 
                 <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-16 items-center text-center text-white">
                     <h1 className="text-4xl md:text-6xl font-extrabold font-nunito mb-6 drop-shadow-xl uppercase tracking-wider">
-                        Lista de Precios
+                        {isEn ? 'Price List' : 'Lista de Precios'}
                     </h1>
                     <div className="w-24 h-1 bg-ma-amarillo rounded-full mb-6"></div>
                 </div>
@@ -92,7 +93,9 @@ export default async function PreciosPage({ params }: Props) {
                     <PriceTable initialExcursions={excursions} />
 
                     <div className="mt-8 text-center text-gray-500 text-sm italic">
-                        * Los precios están sujetos a cambios sin previo aviso. Contáctanos para más información o grupos grandes.
+                        {isEn 
+                            ? '* Prices are subject to change without notice. Contact us for more information or for large groups.'
+                            : '* Los precios están sujetos a cambios sin previo aviso. Contáctanos para más información o grupos grandes.'}
                     </div>
                 </div>
             </section>

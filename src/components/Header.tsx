@@ -35,10 +35,12 @@ export default function Header() {
         }
     }, [isMenuOpen]);
 
+    const isEn = currentLang === 'en';
+
     const navLinks = [
-        { href: `/${currentLang}/nosotros`, label: 'Conocenos' },
-        { href: `/${currentLang}/excursiones`, label: 'Experiencias' },
-        { href: `/${currentLang}/contacto`, label: 'Hablemos' },
+        { href: `/${currentLang}/nosotros`, label: isEn ? 'Know Us' : 'Conocenos' },
+        { href: `/${currentLang}/excursiones`, label: isEn ? 'Experiences' : 'Experiencias' },
+        { href: `/${currentLang}/contacto`, label: isEn ? "Let's Chat" : 'Hablemos' },
     ];
 
     return (

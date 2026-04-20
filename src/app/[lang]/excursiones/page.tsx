@@ -171,8 +171,7 @@ export default async function ExcursionesPage({ params }: Props) {
 
                             {/* Title */}
                             <div className="text-left max-w-lg">
-                                <h1 className="text-4xl md:text-5xl font-extrabold font-nunito leading-tight">
-                                    Muchas excursiones <br /> para todos
+                                <h1 className="text-4xl md:text-5xl font-extrabold font-nunito leading-tight" dangerouslySetInnerHTML={{ __html: lang === 'en' ? 'Excursions <br /> for every traveler' : 'Muchas excursiones <br /> para todos' }}>
                                 </h1>
                             </div>
 

@@ -160,6 +160,27 @@ export default async function Home({ params }: Props) {
     // Optional: Render error state if needed, but for now we proceed with empty list or previous behavior
   }
 
+  const isEn = lang === 'en';
+  const t = {
+    heroTitle: isEn ? 'History <br /> and Adventure!' : 'Historia <br /> y aventura',
+    heroDesc: isEn 
+      ? 'Discover the best of Riviera Maya with the unmissable excursions we offer, let yourself be carried away by the incomparable adventure experiences in the Mayan jungle, a totally natural place full of adventure for the ones that enjoy extreme experiences.'
+      : 'Descubre lo mejor de la Riviera Maya con las imperdibles excursiones que ofrecemos, déjate llevar por las inigualables experiencias de aventura en la selva maya, un lugar totalmente natural lleno de aventura para los que disfrutan de experiencias extremas.',
+    ctaTitle: isEn 
+      ? 'We always aim to share the thrill of our experiences and the calm of nature.'
+      : 'Siempre nos esforzamos por transmitir la adrenalina de nuestras experiencias y la paz de la naturaleza.',
+    ctaQuote: isEn
+      ? '“I went to Maya Adrenaline with my whole family, and it was the best decision of my life, we will return.”'
+      : '“Fui con toda mi familia a MayaAdrenaline, fue la mejor decision de mi vida, volveremos.”',
+    ctaExp: isEn ? 'Full Day Experience' : 'Experiencia Full Day',
+    overviewTitle: isEn ? 'A quick overview' : 'Un vistazo rápido',
+    overviewDesc: isEn
+      ? 'We are a local tourism company with over 10 years of experience operating tours and activities in the Riviera Maya.'
+      : 'Somos una empresa de turismo local, con más de 10 años de experiencia operando excursiones y actividades en la Riviera Maya.',
+    knowUsBtn: isEn ? 'Learn about us' : 'Conocenos',
+    experienceBadge: isEn ? '12 years creating incredible experiences' : '12 años creando experiencias increíbles',
+  };
+
 
   return (
     <div className="min-h-screen font-sans">
@@ -171,9 +192,13 @@ export default async function Home({ params }: Props) {
         style={{ backgroundImage: `url('${heroImage}')` }}
       >
         <div className="container mx-auto px-4">
-          <h2 className="font-nunito md:text-7xl text-5xl font-extrabold mb-16 md:mb-8 text-center md:text-left text-white leading-tight">Historia <br /> y aventura</h2>
+          <h2 className="font-nunito md:text-7xl text-5xl font-extrabold mb-8 text-center md:text-left text-white leading-tight" dangerouslySetInnerHTML={{ __html: t.heroTitle }}></h2>
+          
+          <p className="font-montserrat text-lg md:text-xl text-white mb-16 text-center md:text-left max-w-3xl leading-relaxed opacity-90">
+             {t.heroDesc}
+          </p>
 
-          <ExperienciasPopulares items={popularItems} />
+          <ExperienciasPopulares items={popularItems} lang={lang} />
 
         </div>
       </section>
@@ -182,7 +207,7 @@ export default async function Home({ params }: Props) {
       <main className="container mx-auto px-4 py-12 bg-ma-gris-claro w-full min-h-screen">
 
 
-        <CarruselExperiencias excursiones={excursiones} />
+        <CarruselExperiencias excursiones={excursiones} lang={lang} />
       </main>
 
 
@@ -192,8 +217,7 @@ export default async function Home({ params }: Props) {
       <section className="bg-ma-verdeazul py-24">
         <div className="container mx-auto px-4">
           <h3 className="text-white text-center text-2xl md:text-4xl font-bold mb-16 max-w-5xl mx-auto leading-tight font-nunito">
-            Siempre nos esforzamos por transmitir la adrenalina
-            de nuestras experiencias y la paz de la naturaleza.
+            {t.ctaTitle}
           </h3>
 
           <div
@@ -206,13 +230,13 @@ export default async function Home({ params }: Props) {
           >
             <div className="relative z-10 flex flex-col items-center">
               <p className="text-xl md:text-4xl font-extrabold text-center mb-8 md:mb-12 leading-snug font-nunito">
-                “Fui con toda mi familia a MayaAdrenaline, fue la mejor desicion de mi vida, volveremos.”
+                {t.ctaQuote}
               </p>
 
               <div className="w-full flex justify-end">
                 <div className="text-right">
                   <p className="font-bold text-lg md:text-xl italic">Andrea Andrada</p>
-                  <p className="text-md md:text-lg italic">Experiencia Full Day</p>
+                  <p className="text-md md:text-lg italic">{t.ctaExp}</p>
                 </div>
               </div>
             </div>
@@ -237,14 +261,14 @@ export default async function Home({ params }: Props) {
 
               <div>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-ma-verdeazul mb-6 font-nunito">
-                  Un vistazo rápido
+                  {t.overviewTitle}
                 </h2>
                 <p className="text-lg md:text-xl italic text-ma-verdeazul mb-8 font-montserrat max-w-lg">
-                  Somos una empresa de turismo local, con más de 10 años de experiencia operando excursiones y actividades en la Riviera Maya.
+                  {t.overviewDesc}
                 </p>
 
                 <div className="flex justify-start">
-                  <BotonCTA2 text="Conocenos" href="/nosotros" />
+                  <BotonCTA2 text={t.knowUsBtn} href={`/${lang}/nosotros`} />
                 </div>
               </div>
             </div>
@@ -264,7 +288,7 @@ export default async function Home({ params }: Props) {
               {/* Overlay Card - Protruding */}
               <div className="absolute top-12 -right-6 md:-right-12 bg-ma-verde-fondo text-white p-8 md:p-10 rounded-[40px] max-w-[350px] md:max-w-[400px] shadow-2xl z-20">
                 <h3 className="text-2xl md:text-4xl font-extrabold leading-tight font-nunito">
-                  12 años creando experiencias increíbles
+                  {t.experienceBadge}
                 </h3>
               </div>
             </div>

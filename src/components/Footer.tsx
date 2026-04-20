@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 
 import { Settings } from '@/types/settings';
 
@@ -14,9 +14,22 @@ async function getSettings(): Promise<Settings> {
     }
 }
 
-export default async function Footer() {
+export default async function Footer({ lang = 'es' }: { lang?: string }) {
     const settings = await getSettings();
     const year = new Date().getFullYear();
+    const isEn = lang === 'en';
+
+    const t = {
+        our: isEn ? 'Our Network' : 'Nuestro',
+        resources: isEn ? 'Resources' : 'Recursos',
+        excursions: isEn ? 'Excursions' : 'Excursiones',
+        services: isEn ? 'Services' : 'Servicios',
+        help: isEn ? 'Help' : 'Ayuda',
+        faq: isEn ? 'FAQs' : 'Preguntas Frecuentes',
+        prices: isEn ? 'Prices' : 'Precios',
+        contact: isEn ? 'Contact' : 'Contacto',
+        created: isEn ? 'Created by' : 'Creado por',
+    };
 
     return (
         <footer className="bg-[#1A2C00] text-white">
@@ -38,7 +51,7 @@ export default async function Footer() {
 
                     {/* Column 1: Nuestro */}
                     <div>
-                        <h4 className="font-bold text-lg mb-6 font-nunito">Nuestro</h4>
+                        <h4 className="font-bold text-lg mb-6 font-nunito">{t.our}</h4>
                         <ul className="space-y-4 font-montserrat font-light text-gray-300">
                             {settings.social_facebook && (
                                 <li><a href={settings.social_facebook} target="_blank" rel="noopener noreferrer" className="hover:text-ma-amarillo transition-colors">Facebook</a></li>
@@ -58,21 +71,21 @@ export default async function Footer() {
 
                     {/* Column 2: Recursos */}
                     <div>
-                        <h4 className="font-bold text-lg mb-6 font-nunito">Recursos</h4>
+                        <h4 className="font-bold text-lg mb-6 font-nunito">{t.resources}</h4>
                         <ul className="space-y-4 font-montserrat font-light text-gray-300">
 
-                            <li><Link href="/excursiones" className="hover:text-ma-amarillo transition-colors">Excursiones</Link></li>
-                            <li><a href="#" className="hover:text-ma-amarillo transition-colors">Servicios</a></li>
+                            <li><Link href={`/${lang}/excursiones`} className="hover:text-ma-amarillo transition-colors">{t.excursions}</Link></li>
+                            <li><a href="#" className="hover:text-ma-amarillo transition-colors">{t.services}</a></li>
                         </ul>
                     </div>
 
                     {/* Column 3: Ayuda */}
                     <div>
-                        <h4 className="font-bold text-lg mb-6 font-nunito">Ayuda</h4>
+                        <h4 className="font-bold text-lg mb-6 font-nunito">{t.help}</h4>
                         <ul className="space-y-4 font-montserrat font-light text-gray-300">
-                            <li><a href="/preguntas-frecuentes" className="hover:text-ma-amarillo transition-colors">Preguntas Frecuentes</a></li>
-                            <li><a href="/precios" className="hover:text-ma-amarillo transition-colors">Precios</a></li>
-                            <li><Link href="/contacto" className="hover:text-ma-amarillo transition-colors">Contacto</Link></li>
+                            <li><a href={`/${lang}/preguntas-frecuentes`} className="hover:text-ma-amarillo transition-colors">{t.faq}</a></li>
+                            <li><a href={`/${lang}/precios`} className="hover:text-ma-amarillo transition-colors">{t.prices}</a></li>
+                            <li><Link href={`/${lang}/contacto`} className="hover:text-ma-amarillo transition-colors">{t.contact}</Link></li>
 
                         </ul>
                     </div>
@@ -86,7 +99,7 @@ export default async function Footer() {
                         Copyright &copy; {year} Maya Adrenaline. All Rights Reserved.
                     </div>
                     <div>
-                        Creado por <a href="https://mikewordpress.com/" className="hover:text-white transition-colors">MikeWordPress</a>
+                        {t.created} <a href="https://mikewordpress.com/" className="hover:text-white transition-colors">MikeWordPress</a>
                     </div>
                 </div>
             </div>

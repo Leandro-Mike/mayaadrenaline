@@ -1,12 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "ma-accommodation-promo-dismissed";
 const VILLA_CISNE_URL = "https://villa-cisne.mayaadrenaline.com.mx/";
 
 export default function AccommodationPromoPopup() {
 	const [visible, setVisible] = useState(false);
+
+	const pathname = usePathname();
+	const isEn = pathname?.startsWith('/en');
 
 	useEffect(() => {
 		const id = requestAnimationFrame(() => {
@@ -45,7 +49,7 @@ export default function AccommodationPromoPopup() {
 				type="button"
 				onClick={dismiss}
 				className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full text-lg leading-none text-ma-gris-claro/80 transition hover:bg-white/10 hover:text-white"
-				aria-label="Cerrar aviso"
+				aria-label={isEn ? "Close promo" : "Cerrar aviso"}
 			>
 				×
 			</button>
@@ -53,7 +57,7 @@ export default function AccommodationPromoPopup() {
 				id="accommodation-promo-title"
 				className="pr-7 text-sm font-medium leading-snug text-ma-gris-claro"
 			>
-				Necesitas alojamiento en la Rivera Maya
+				{isEn ? "Looking for accommodation in Riviera Maya?" : "Necesitas alojamiento en la Rivera Maya"}
 			</p>
 			<a
 				href={VILLA_CISNE_URL}
@@ -61,7 +65,7 @@ export default function AccommodationPromoPopup() {
 				rel="noopener noreferrer"
 				className="mt-3 inline-flex w-full items-center justify-center rounded-full bg-ma-amarillo px-4 py-2.5 text-sm font-semibold text-black transition hover:brightness-110"
 			>
-				Ver Villa Cisne
+				{isEn ? "View Villa Cisne" : "Ver Villa Cisne"}
 			</a>
 		</div>
 	);

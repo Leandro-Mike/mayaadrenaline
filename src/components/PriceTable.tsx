@@ -22,6 +22,17 @@ export default function PriceTable({ initialExcursions }: PriceTableProps) {
     const currentLang = params?.lang || 'es';
     const [excursions, setExcursions] = useState(initialExcursions);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
+    const isEn = currentLang === 'en';
+
+    const t = {
+        excursion: isEn ? 'Excursion' : 'Excursión',
+        duration: isEn ? 'Duration' : 'Duración',
+        price: isEn ? 'Price' : 'Precio',
+        sortByPrice: isEn ? 'Sort by Price' : 'Ordenar por Precio',
+        from: isEn ? 'From' : 'Desde',
+        perPerson: isEn ? 'per person' : 'por persona',
+        empty: isEn ? 'No excursions available at the moment.' : 'No hay excursiones disponibles por el momento.'
+    };
 
     const handleSort = () => {
         // ... sort logic (remains same)
@@ -43,14 +54,14 @@ export default function PriceTable({ initialExcursions }: PriceTableProps) {
         <div className="w-full font-montserrat">
             {/* Cabecera para Desktop - oculta en mobile */}
             <div className="hidden md:grid grid-cols-12 bg-ma-verdeazul text-white font-bold uppercase tracking-wider border-b-4 border-ma-amarillo rounded-t-xl overflow-hidden shadow-md">
-                <div className="col-span-6 px-6 py-4 text-lg">Excursión</div>
-                <div className="col-span-3 px-4 py-4 text-center text-lg">Duración</div>
+                <div className="col-span-6 px-6 py-4 text-lg">{t.excursion}</div>
+                <div className="col-span-3 px-4 py-4 text-center text-lg">{t.duration}</div>
                 <div
                     className="col-span-3 px-6 py-4 text-right text-lg cursor-pointer hover:bg-white/10 transition-colors select-none"
                     onClick={handleSort}
                 >
                     <div className="flex items-center justify-end gap-2">
-                        <span>Precio</span>
+                        <span>{t.price}</span>
                         <div className="flex flex-col text-[10px] leading-none opacity-70">
                             <span className={sortOrder === 'asc' ? 'text-ma-amarillo' : ''}>▲</span>
                             <span className={sortOrder === 'desc' ? 'text-ma-amarillo' : ''}>▼</span>
@@ -65,7 +76,7 @@ export default function PriceTable({ initialExcursions }: PriceTableProps) {
                     onClick={handleSort}
                     className="flex items-center gap-2 bg-ma-verdeazul text-white px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider shadow-sm active:scale-95 transition-transform"
                 >
-                    <span>Ordenar por Precio</span>
+                    <span>{t.sortByPrice}</span>
                     <div className="flex flex-col text-[10px] leading-none">
                         <span className={sortOrder === 'asc' ? 'text-ma-amarillo' : 'opacity-40'}>▲</span>
                         <span className={sortOrder === 'desc' ? 'text-ma-amarillo' : 'opacity-40'}>▼</span>
@@ -105,12 +116,12 @@ export default function PriceTable({ initialExcursions }: PriceTableProps) {
                                     {/* Precio */}
                                     <div className="w-full md:col-span-3 md:pl-4 text-right font-bold text-ma-verdeazul text-xl flex justify-between md:justify-end items-center gap-4">
                                         <div className="md:hidden flex flex-col items-start">
-                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Desde</span>
+                                            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t.from}</span>
                                         </div>
 
                                         <div className="flex items-center gap-3">
                                             <div className="flex flex-col items-end">
-                                                <span className="hidden md:block text-[10px] text-gray-400 font-normal uppercase tracking-tighter">por persona</span>
+                                                <span className="hidden md:block text-[10px] text-gray-400 font-normal uppercase tracking-tighter">{t.perPerson}</span>
                                                 <div className="flex items-center">
                                                     <span className="text-sm text-gray-400 font-normal mr-1">USD</span>
                                                     <span className="text-2xl md:text-xl">${exc.price}</span>
@@ -130,7 +141,7 @@ export default function PriceTable({ initialExcursions }: PriceTableProps) {
                             </motion.div>
                         ))
                     ) : (
-                        <div className="px-6 py-12 text-center text-gray-500 italic">No hay excursiones disponibles por el momento.</div>
+                        <div className="px-6 py-12 text-center text-gray-500 italic">{t.empty}</div>
                     )}
                 </AnimatePresence>
             </div>

@@ -19,8 +19,20 @@ export const metadata = {
     description: 'Ponte en contacto con nosotros para vivir la mejor aventura en la Riviera Maya.',
 };
 
-export default async function ContactoPage() {
+type Props = { params: Promise<{ lang: string }> };
+
+export default async function ContactoPage({ params }: Props) {
+    const { lang } = await params;
+    const isEn = lang === 'en';
     const settings = await getSettings();
+
+    const t = {
+        title: isEn ? 'LET’S CHAT!' : 'Hablemos',
+        desc: isEn ? '¿Do you have questions or want to customize your adventure? We\'re here to help.' : '¿Tienes dudas o quieres personalizar tu aventura? Estamos aquí para ayudarte.',
+        infoTitle: isEn ? 'Contact Information' : 'Información de Contacto',
+        infoDesc: isEn ? 'If you prefer to contact us directly, you can use the following methods. We usually respond within 24 hours' : 'Si prefieres contactarnos directamente, puedes usar los siguientes medios. Respondemos usualmente en menos de 24 horas.',
+        formTitle: isEn ? 'Send us a message' : 'Envíanos un mensaje',
+    };
 
     // Fallbacks
     const heroImage = settings.contacto_hero_image && settings.contacto_hero_image !== ''
@@ -47,11 +59,11 @@ export default async function ContactoPage() {
 
                 <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center text-white pb-20 pt-32">
                     <h1 className="text-5xl md:text-7xl font-extrabold font-nunito mb-6 drop-shadow-xl uppercase tracking-wider">
-                        Hablemos
+                        {t.title}
                     </h1>
                     <div className="w-24 h-1 bg-ma-amarillo rounded-full mb-6"></div>
                     <p className="text-xl font-montserrat font-light max-w-2xl">
-                        ¿Tienes dudas o quieres personalizar tu aventura? Estamos aquí para ayudarte.
+                        {t.desc}
                     </p>
                 </div>
             </section>
@@ -63,9 +75,9 @@ export default async function ContactoPage() {
                     {/* Contact Info */}
                     <div className="space-y-12">
                         <div>
-                            <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-6">Información de Contacto</h3>
+                            <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-6">{t.infoTitle}</h3>
                             <p className="font-montserrat text-gray-700 leading-relaxed mb-8">
-                                Si prefieres contactarnos directamente, puedes usar los siguientes medios. Respondemos usualmente en menos de 24 horas.
+                                {t.infoDesc}
                             </p>
 
                             <ul className="space-y-6 font-montserrat text-lg text-gray-800">
@@ -87,7 +99,7 @@ export default async function ContactoPage() {
 
                     {/* Form Component */}
                     <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-xl relative overflow-hidden">
-                        <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-8">Envíanos un mensaje</h3>
+                        <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-8">{t.formTitle}</h3>
                         <ContactForm />
                     </div>
 

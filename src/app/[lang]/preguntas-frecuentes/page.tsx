@@ -1,4 +1,3 @@
-﻿
 import FAQList from '@/components/FAQList';
 import BotonCTA from '@/components/botonCTA';
 import { Settings } from '@/types/settings';
@@ -14,10 +13,10 @@ interface FAQItem {
     content: { rendered: string };
 }
 
-async function getFAQs(): Promise<FAQItem[]> {
+async function getFAQs(lang: string): Promise<FAQItem[]> {
     const apiUrl = (process.env.WP_BUILD_URL || (process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx') || 'https://back.mayaadrenaline.com.mx');
     try {
-        const res = await fetch(`${apiUrl}/wp-json/wp/v2/faq?per_page=100`, { next: { revalidate: 60 } });
+        const res = await fetch(`${apiUrl}/wp-json/wp/v2/faq?per_page=100&lang=${lang}`, { next: { revalidate: 60 } });
         if (!res.ok) return [];
         return res.json();
     } catch (error) {
@@ -37,21 +36,36 @@ async function getSettings(): Promise<Settings> {
     }
 }
 
-export default async function FaqPage() {
-    const apiFaqsPromise = getFAQs();
+type Props = { params: Promise<{ lang: string }> };
+
+export default async function FaqPage({ params }: Props) {
+    const { lang } = await params;
+    const isEn = lang === 'en';
+    const apiFaqsPromise = getFAQs(lang);
     const settingsDataPromise = getSettings();
 
     // Fallback FAQs hardcoded if API returns empty
-    const fallbackFaqs = [
+    const fallbackFaqs = isEn ? [
         {
             id: 9991,
-            title: { rendered: "¿Necesito experiencia previa para las actividades?" },
-            content: { rendered: "No, nuestras actividades están diseñadas para todos los niveles. Nuestros guías certificados te darán instrucciones detalladas antes de comenzar." }
+            title: { rendered: "Private groups" },
+            content: { rendered: "Do you have a large group? Or perhaps you're looking for exclusivity? Contact us and ask about our private groups!" }
         },
         {
             id: 9992,
-            title: { rendered: "¿Qué debo llevar a las excursiones?" },
-            content: { rendered: "Recomendamos ropa cómoda, traje de baño, toalla, cambios de ropa seca, zapatos de agua o tenis que se puedan mojar, repelente biodegradable y protector solar biodegradable." }
+            title: { rendered: "Where do I pick up transportation?" },
+            content: { rendered: "All activities include transportation. Contact us to confirm pickup at your hotel or nearest location." }
+        }
+    ] : [
+        {
+            id: 9991,
+            title: { rendered: "Grupos privados" },
+            content: { rendered: "¿Tienes un grupo grande? ¿O tal vez buscas exclusividad? ¡Contáctanos y pregunta por nuestros grupos privados!" }
+        },
+        {
+            id: 9992,
+            title: { rendered: "¿Dónde tomo el transporte?" },
+            content: { rendered: "Todas las actividades incluyen transporte. Contáctanos para confirmar el recogido en tu hotel o locación más cercana." }
         }
     ];
 
@@ -78,7 +92,7 @@ export default async function FaqPage() {
 
                 <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-16 items-center text-center text-white">
                     <h1 className="text-4xl md:text-6xl font-extrabold font-nunito mb-6 drop-shadow-xl uppercase tracking-wider">
-                        Preguntas Frecuentes
+                        {isEn ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
                     </h1>
                     <div className="w-24 h-1 bg-ma-amarillo rounded-full mb-6"></div>
                 </div>
@@ -91,9 +105,9 @@ export default async function FaqPage() {
                     <FAQList faqs={faqs} />
 
                     <div className="text-center pt-12">
-                        <p className="font-montserrat text-gray-600 mb-6">¿Aún tienes dudas?</p>
+                        <p className="font-montserrat text-gray-600 mb-6">{isEn ? 'Still have questions?' : '¿Aún tienes dudas?'}</p>
                         <div className="flex justify-center">
-                            <BotonCTA />
+                            <BotonCTA text={isEn ? 'Reach out to us' : 'Contáctanos'} />
                         </div>
                     </div>
 

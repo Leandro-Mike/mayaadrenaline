@@ -3,13 +3,22 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function BotonCTA() {
+interface BotonCTAProps {
+    text?: string;
+    href?: string;
+}
+
+export default function BotonCTA({ text, href }: BotonCTAProps) {
     const pathname = usePathname();
     const currentLang = pathname?.startsWith('/en') ? 'en' : 'es';
+    
+    // Default values depend on currentLang, so we define them here if not provided
+    const linkHref = href || `/${currentLang}/excursiones`;
+    const btnText = text || (currentLang === 'en' ? 'Book now' : 'Reservar');
 
     return (
-        <Link href={`/${currentLang}/excursiones`} className="flex items-center gap-2 text-white rounded-full transition-all hover:scale-105">
-            <span className="text-lg bg-white  text-black px-6 py-1 rounded-full font-montserrat font-light italic">Reservar</span>
+        <Link href={linkHref} className="flex items-center gap-2 text-white rounded-full transition-all hover:scale-105">
+            <span className="text-lg bg-white  text-black px-6 py-1 rounded-full font-montserrat font-light italic">{btnText}</span>
             <div className="bg-white rounded-full p-2 w-10 h-10 flex items-center justify-center">
                 <img src={`https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/02/flechaUp.svg`} alt="Arrow" className="w-6 h-6" />
             </div>

@@ -30,9 +30,9 @@ export interface Excursion {
     link: string;
 }
 
-export default function Carousel({ excursiones }: { excursiones: Excursion[] }) {
+export default function Carousel({ excursiones, lang }: { excursiones: Excursion[], lang?: string }) {
     const params = useParams();
-    const currentLang = params?.lang || 'es';
+    const currentLang = lang || params?.lang || 'es';
     const [emblaRef, emblaApi] = useEmblaCarousel(
         { loop: true, align: 'start', dragFree: true },
         [AutoScroll({ playOnInit: true, speed: 1, stopOnInteraction: true, stopOnMouseEnter: true })]
@@ -57,9 +57,13 @@ export default function Carousel({ excursiones }: { excursiones: Excursion[] }) 
 
             <div className="w-full md:w-[40%] flex flex-col justify-center items-center md:items-start text-center md:text-left p-4 md:p-8 space-y-6 md:space-y-8 mb-8 md:mb-0">
                 <h2 className="font-nunito text-4xl md:text-5xl lg:text-7xl font-extrabold text-ma-verde-fondo leading-tight">
-                    MUCHAS<br />EMOCIONES<br />EN UN SOLO<br />LUGAR
+                    {currentLang === 'en' ? (
+                        <>MANY<br />EMOTIONS<br />IN ONE<br />PLACE</>
+                    ) : (
+                        <>MUCHAS<br />EMOCIONES<br />EN UN SOLO<br />LUGAR</>
+                    )}
                 </h2>
-                <BotonCTA2 href="/excursiones" />
+                <BotonCTA2 href={`/${currentLang}/excursiones`} text={currentLang === 'en' ? 'Explore our offerings' : 'Explorar'} />
             </div>
 
 

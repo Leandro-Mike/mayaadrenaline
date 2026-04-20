@@ -59,7 +59,7 @@ export default async function RootLayout({
         <div className="flex-grow">
           {children}
         </div>
-        <Footer />
+        <Footer lang={lang}/>
         <AccommodationPromoPopup />
       </body>
     </html>
