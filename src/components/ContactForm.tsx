@@ -42,10 +42,25 @@ export default function ContactForm() {
         }
     };
 
+    const isEn = typeof window !== 'undefined' && window.location.pathname.startsWith('/en');
+
+    const t = {
+        name: isEn ? 'Name' : 'Nombre',
+        email: isEn ? 'Email' : 'Correo Electrónico',
+        message: isEn ? 'Message' : 'Mensaje',
+        namePlaceholder: isEn ? 'Your full name' : 'Tu nombre completo',
+        emailPlaceholder: isEn ? 'youremail@example.com' : 'tucorreo@ejemplo.com',
+        msgPlaceholder: isEn ? 'How can we help you?' : '¿En qué podemos ayudarte?',
+        btnIdle: isEn ? 'Send Message' : 'Enviar Mensaje',
+        btnSending: isEn ? 'Sending...' : 'Enviando...',
+        success: isEn ? (respMessage === 'Gracias por contactarnos.' ? 'Thank you for contacting us.' : respMessage) : respMessage,
+        error: isEn ? (respMessage === 'Hubo un error. Inténtalo de nuevo.' ? 'There was an error. Please try again.' : respMessage) : respMessage,
+    };
+
     return (
         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
             <div>
-                <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2 font-montserrat">Nombre</label>
+                <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2 font-montserrat">{t.name}</label>
                 <input
                     type="text"
                     id="name"
@@ -53,13 +68,13 @@ export default function ContactForm() {
                     value={formData.name}
                     onChange={handleChange}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat placeholder-gray-600"
-                    placeholder="Tu nombre completo"
+                    placeholder={t.namePlaceholder}
                     required
                 />
             </div>
 
             <div>
-                <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2 font-montserrat">Correo Electrónico</label>
+                <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2 font-montserrat">{t.email}</label>
                 <input
                     type="email"
                     id="email"
@@ -67,13 +82,13 @@ export default function ContactForm() {
                     value={formData.email}
                     onChange={handleChange}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat placeholder-gray-600"
-                    placeholder="tucorreo@ejemplo.com"
+                    placeholder={t.emailPlaceholder}
                     required
                 />
             </div>
 
             <div>
-                <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2 font-montserrat">Mensaje</label>
+                <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2 font-montserrat">{t.message}</label>
                 <textarea
                     id="message"
                     name="message"
@@ -81,7 +96,7 @@ export default function ContactForm() {
                     onChange={handleChange}
                     rows={5}
                     className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat resize-none placeholder-gray-600"
-                    placeholder="¿En qué podemos ayudarte?"
+                    placeholder={t.msgPlaceholder}
                     required
                 ></textarea>
             </div>
@@ -91,17 +106,17 @@ export default function ContactForm() {
                 disabled={status === 'sending'}
                 className="w-full bg-ma-verdeazul text-white font-bold font-montserrat py-4 rounded-xl hover:bg-[#0f2424] transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
             >
-                {status === 'sending' ? 'Enviando...' : 'Enviar Mensaje'}
+                {status === 'sending' ? t.btnSending : t.btnIdle}
             </button>
 
             {status === 'success' && (
                 <div className="bg-green-100 text-green-800 p-4 rounded-xl text-center font-bold font-montserrat mt-4 border border-green-200">
-                    {respMessage}
+                    {t.success}
                 </div>
             )}
             {status === 'error' && (
                 <div className="bg-red-100 text-red-800 p-4 rounded-xl text-center font-bold font-montserrat mt-4 border border-red-200">
-                    {respMessage}
+                    {t.error}
                 </div>
             )}
 
