@@ -17,7 +17,8 @@ export default function ContactForm() {
         setRespMessage('');
 
         try {
-            const res = await fetch(`/wp-json/maya-adrenaline/v1/contact`, {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://back.mayaadrenaline.com.mx';
+            const res = await fetch(`${apiUrl}/wp-json/maya-adrenaline/v1/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
