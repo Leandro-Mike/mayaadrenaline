@@ -306,7 +306,7 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
                                     ? String(excursion.precio_menor)
                                     : ''
                             }
-                            whatsappNumber={String(settings.whatsapp_number || '')}
+                            whatsappNumber={String(settings.whatsapp_number || '+52 984 166 2349')}
                             messageTemplate={String(settings.whatsapp_template || '')}
                             preciosAdicionales={preciosAdicionales}
                             preciosComplementariosPorPersona={preciosComplPorPersona}

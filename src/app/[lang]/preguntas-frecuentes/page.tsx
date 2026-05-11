@@ -81,7 +81,7 @@ export default async function FaqPage({ params }: Props) {
         <div className="font-sans bg-[#F4F1E8] min-h-screen">
 
             {/* Hero Section */}
-            <section className="relative h-[50vh] w-full mt-[-100px]">
+            <section className="relative h-[60vh] w-full">
                 <div className="absolute inset-0 bg-[#0B1D1D]">
                     <div
                         className="absolute inset-0 opacity-40 mix-blend-overlay bg-cover bg-center"
@@ -90,7 +90,7 @@ export default async function FaqPage({ params }: Props) {
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D1D]/90 via-transparent to-black/30"></div>
                 </div>
 
-                <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-16 items-center text-center text-white">
+                <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center pb-20 pt-48 items-center text-center text-white">
                     <h1 className="text-4xl md:text-6xl font-extrabold font-nunito mb-6 drop-shadow-xl uppercase tracking-wider">
                         {isEn ? 'Frequently Asked Questions' : 'Preguntas Frecuentes'}
                     </h1>

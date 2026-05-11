@@ -34,14 +34,14 @@ export default async function NosotrosPage({ params }: Props) {
         <div className="font-sans bg-[#F4F1E8] min-h-screen">
 
             {/* Hero Section */}
-            <section className="relative h-[60vh] w-full mt-[-100px]">
+            <section className="relative h-[60vh] w-full">
                 <div className="absolute inset-0 bg-[#0B1D1D]">
-                    {/* Placeholder for Hero Image - User should replace this */}
-                    <div className="absolute inset-0 opacity-40 mix-blend-overlay bg-[url('https://dummyimage.com/1920x1080/0b1d1d/ffffff?text=Nature+Background')] bg-cover bg-center"></div>
+                    {/* Hero Image */}
+                    <div className="absolute inset-0 opacity-40 mix-blend-overlay bg-[url('https://back.mayaadrenaline.com.mx/wp-content/uploads/2026/05/WhatsApp-Image-2026-04-27-at-19.04.46.jpeg')] bg-cover bg-center"></div>
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0B1D1D]/90 via-transparent to-black/30"></div>
                 </div>
 
-                <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-16 items-center text-center text-white">
+                <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center pb-20 pt-48 items-center text-center text-white">
                     <h1 className="text-5xl md:text-7xl font-extrabold font-nunito mb-6 drop-shadow-xl uppercase tracking-wider">
                         {t.title}
                     </h1>
