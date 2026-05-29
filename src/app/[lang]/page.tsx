@@ -152,7 +152,8 @@ export default async function Home({ params }: Props) {
   const popularItems = buildFeaturedExperienceItems(
     featuredIds,
     excursiones,
-    apiBaseForImages
+    apiBaseForImages,
+    lang
   );
 
   if (excursionesResult.status === 'rejected') {

@@ -74,7 +74,8 @@ type ExcursionForFeatured = {
 export function buildFeaturedExperienceItems(
 	ids: number[] | undefined,
 	excursiones: ExcursionForFeatured[],
-	apiBase: string
+	apiBase: string,
+	lang?: string
 ): FeaturedExperienceItem[] {
 	if (!ids?.length || !excursiones?.length) {
 		return [];
@@ -98,9 +99,10 @@ export function buildFeaturedExperienceItems(
 		if (img && img.startsWith("/")) {
 			img = `${base}${img}`;
 		}
+		const prefix = lang ? `/${lang}` : "";
 		out.push({
 			title: stripHtml(e.title.rendered),
-			href: `/excursiones/${e.slug}`,
+			href: `${prefix}/excursiones/${e.slug}`,
 			image: img || undefined,
 		});
 	}
