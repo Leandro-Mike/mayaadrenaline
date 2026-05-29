@@ -15,9 +15,11 @@ interface Activity {
 
 interface ExcursionActivitiesProps {
     activities: Activity[];
+    lang?: string;
 }
 
-export default function ExcursionActivities({ activities }: ExcursionActivitiesProps) {
+export default function ExcursionActivities({ activities, lang = 'es' }: ExcursionActivitiesProps) {
+    const isEn = lang === 'en';
     const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', slidesToScroll: 1, loop: false });
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
@@ -35,7 +37,7 @@ export default function ExcursionActivities({ activities }: ExcursionActivitiesP
     return (
         <section className="bg-[#f4f1e8] py-20 relative">
             <div className="container mx-auto px-4 text-center">
-                <h3 className="text-3xl md:text-5xl font-bold font-nunito text-ma-verdeazul mb-16">Todo lo que disfrutarás</h3>
+                <h3 className="text-3xl md:text-5xl font-bold font-nunito text-ma-verdeazul mb-16">{isEn ? 'Everything you will enjoy' : 'Todo lo que disfrutarás'}</h3>
 
                 <div className="relative max-w-6xl mx-auto overflow-hidden" ref={emblaRef}>
                     <div className="flex -ml-6 pb-12">
@@ -64,7 +66,7 @@ export default function ExcursionActivities({ activities }: ExcursionActivitiesP
                                     <h4 className="text-4xl font-extrabold font-nunito text-[#0B1D1D] mb-4 leading-none">{activity.name}</h4>
 
                                     <p className="font-montserrat text-base text-[#0B1D1D] font-bold leading-snug">
-                                        {activity.description || "Una experiencia inolvidable en contacto con la naturaleza y la aventura."}
+                                        {activity.description || (isEn ? 'An unforgettable experience in contact with nature and adventure.' : 'Una experiencia inolvidable en contacto con la naturaleza y la aventura.')}
                                     </p>
 
                                 </div>

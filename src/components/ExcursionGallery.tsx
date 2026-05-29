@@ -13,9 +13,11 @@ interface GalleryImage {
 
 interface ExcursionGalleryProps {
     images: GalleryImage[];
+    lang?: string;
 }
 
-export default function ExcursionGallery({ images }: ExcursionGalleryProps) {
+export default function ExcursionGallery({ images, lang = 'es' }: ExcursionGalleryProps) {
+    const isEn = lang === 'en';
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
     const scrollPrev = useCallback(() => {
@@ -31,7 +33,7 @@ export default function ExcursionGallery({ images }: ExcursionGalleryProps) {
     return (
         <section className="bg-[#0b1d1d] py-20 relative">
             <div className="container mx-auto px-4">
-                <h3 className="text-3xl md:text-4xl font-bold font-nunito text-white mb-12 text-center">Algunas vistas</h3>
+                <h3 className="text-3xl md:text-4xl font-bold font-nunito text-white mb-12 text-center">{isEn ? 'Some views' : 'Algunas vistas'}</h3>
 
                 <div className="relative group max-w-6xl mx-auto px-12 md:px-20">
                     {/* Carousel Viewport */}

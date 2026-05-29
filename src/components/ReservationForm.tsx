@@ -18,6 +18,7 @@ interface ReservationFormProps {
     messageTemplate: string;
     preciosAdicionales?: PrecioAdicionalRow[];
     preciosComplementariosPorPersona?: boolean;
+    lang?: string;
 }
 
 export default function ReservationForm({
@@ -28,7 +29,9 @@ export default function ReservationForm({
     messageTemplate,
     preciosAdicionales = [],
     preciosComplementariosPorPersona = true,
+    lang = 'es',
 }: ReservationFormProps) {
+    const isEn = lang === 'en';
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [adults, setAdults] = useState(1);
@@ -97,8 +100,8 @@ export default function ReservationForm({
     ]);
 
     const modoEtiqueta = preciosComplementariosPorPersona
-        ? 'por persona'
-        : 'por reserva';
+        ? (isEn ? 'per person' : 'por persona')
+        : (isEn ? 'per booking' : 'por reserva');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -154,7 +157,7 @@ export default function ReservationForm({
 
     return (
         <div className="bg-[#0b1d1d] text-white p-8 rounded-[30px] shadow-2xl max-w-md mx-auto relative overflow-hidden">
-            <h3 className="text-3xl font-bold font-nunito mb-8 text-center">Haz tu reservación</h3>
+            <h3 className="text-3xl font-bold font-nunito mb-8 text-center">{isEn ? 'Make your reservation' : 'Haz tu reservación'}</h3>
 
             <form
                 onSubmit={handleSubmit}
@@ -164,7 +167,7 @@ export default function ReservationForm({
                 <div className="relative">
                     <input
                         type="text"
-                        placeholder="Su nombre"
+                        placeholder={isEn ? "Your name" : "Su nombre"}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="w-full bg-[#f4f1e8] text-gray-800 placeholder-gray-500 px-6 py-4 rounded-full focus:outline-none focus:ring-2 focus:ring-ma-amarillo transition-all font-montserrat italic"
@@ -197,7 +200,7 @@ export default function ReservationForm({
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="relative">
-                        <label className="block text-xs text-ma-gris-claro/90 font-montserrat mb-1.5">Adultos</label>
+                        <label className="block text-xs text-ma-gris-claro/90 font-montserrat mb-1.5">{isEn ? 'Adults' : 'Adultos'}</label>
                         <input
                             type="number"
                             min="1"
@@ -212,7 +215,7 @@ export default function ReservationForm({
                         />
                     </div>
                     <div className="relative">
-                        <label className="block text-xs text-ma-gris-claro/90 font-montserrat mb-1.5">Menores</label>
+                        <label className="block text-xs text-ma-gris-claro/90 font-montserrat mb-1.5">{isEn ? 'Minors' : 'Menores'}</label>
                         <input
                             type="number"
                             min="0"
@@ -227,7 +230,7 @@ export default function ReservationForm({
                     </div>
                 </div>
                 <p className="text-xs text-gray-400 -mt-2 font-montserrat">
-                    Total personas: <strong className="text-ma-gris-claro">{peopleTotal}</strong>
+                    Total {isEn ? 'people' : 'personas'}: <strong className="text-ma-gris-claro">{peopleTotal}</strong>
                 </p>
 
                 {(preciosAdicionales.length > 0 || metaMinorUnit > 0) ? (
@@ -235,10 +238,10 @@ export default function ReservationForm({
                         {metaMinorUnit > 0 ? (
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-wide text-ma-amarillo mb-1.5">
-                                    Precio por menor (excursión)
+                                    {isEn ? 'Price per minor (excursion)' : 'Precio por menor (excursión)'}
                                 </p>
                                 <p className="text-sm text-gray-200 font-montserrat flex justify-between gap-3">
-                                    <span>Tarifa por cada menor</span>
+                                    <span>{isEn ? 'Rate per minor' : 'Tarifa por cada menor'}</span>
                                     <span className="font-medium">${metaMinorUnit.toFixed(2)}</span>
                                 </p>
                             </div>
@@ -246,7 +249,7 @@ export default function ReservationForm({
                         {minorRows.length > 0 ? (
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-wide text-ma-amarillo mb-1.5">
-                                    Tarifa menores (por cada menor)
+                                    {isEn ? 'Minors rate (per minor)' : 'Tarifa menores (por cada menor)'}
                                 </p>
                                 <ul className="space-y-1.5 text-sm text-gray-200 font-montserrat">
                                     {minorRows.map((row, i) => (
@@ -261,7 +264,7 @@ export default function ReservationForm({
                         {otherRows.length > 0 ? (
                             <div>
                                 <p className="text-xs font-semibold uppercase tracking-wide text-ma-amarillo mb-1.5">
-                                    Complementos ({modoEtiqueta})
+                                    {isEn ? `Add-ons (${modoEtiqueta})` : `Complementos (${modoEtiqueta})`}
                                 </p>
                                 <ul className="space-y-1.5 text-sm text-gray-200 font-montserrat">
                                     {otherRows.map((row, i) => (
@@ -275,23 +278,23 @@ export default function ReservationForm({
                         ) : null}
                         <div className="text-xs text-gray-300 border-t border-white/10 pt-2 mt-1 space-y-1 font-montserrat">
                             <p>
-                                Adultos × {adults} × ${baseUnit.toFixed(2)}: <strong>${adultSub.toFixed(2)}</strong>
+                                {isEn ? 'Adults' : 'Adultos'} × {adults} × ${baseUnit.toFixed(2)}: <strong>${adultSub.toFixed(2)}</strong>
                             </p>
                             {minors > 0 ? (
                                 <p>
-                                    Menores × {minors} × ${minorRate.toFixed(2)}
+                                    {isEn ? 'Minors' : 'Menores'} × {minors} × ${minorRate.toFixed(2)}
                                     {metaMinorUnit <= 0 && minorUnitFromTable <= 0
-                                        ? ' (misma base que adulto)'
+                                        ? (isEn ? ' (same base as adult)' : ' (misma base que adulto)')
                                         : ''}:{' '}
                                     <strong>${minorSub.toFixed(2)}</strong>
                                 </p>
                             ) : null}
                             {extrasUnit > 0 ? (
                                 <p>
-                                    Complementos{preciosComplementariosPorPersona ? ` × ${peopleTotal} pers.` : ''}:{' '}
+                                    {isEn ? 'Add-ons' : 'Complementos'}{preciosComplementariosPorPersona ? ` × ${peopleTotal} ${isEn ? 'pers.' : 'pers.'}` : ''}:{' '}
                                     <strong>${extrasEnTotal.toFixed(2)}</strong>
                                     {!preciosComplementariosPorPersona ? (
-                                        <span className="text-gray-400"> (una vez por reserva)</span>
+                                        <span className="text-gray-400"> {isEn ? '(once per booking)' : '(una vez por reserva)'}</span>
                                     ) : null}
                                 </p>
                             ) : null}
@@ -309,7 +312,7 @@ export default function ReservationForm({
                         type="submit"
                         className="bg-white text-black px-6 py-2 rounded-full font-montserrat font-bold flex items-center gap-2 hover:bg-gray-200 transition-colors"
                     >
-                        <span>Reservar</span>
+                        <span>{isEn ? 'Book now' : 'Reservar'}</span>
                         <div className="bg-[#25D366] rounded-full p-1 flex items-center justify-center w-6 h-6">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M17.472 14.382C17.11 14.196 15.335 13.303 14.996 13.184C14.657 13.065 14.417 13.003 14.17 13.364C13.924 13.725 13.238 14.536 13.024 14.779C12.81 15.022 12.593 15.056 12.231 14.869C11.859 14.678 10.666 14.28 9.255 13.004C8.136 12.001 7.378 10.758 7.16 10.375C6.942 9.993 7.136 9.789 7.317 9.608C7.476 9.449 7.674 9.191 7.854 8.98C8.036 8.769 8.096 8.615 8.217 8.358C8.337 8.1 8.277 7.876 8.182 7.675C8.086 7.475 7.329 5.567 7.02 4.825C6.702 4.09 6.398 4.192 6.173 4.192H5.61C5.398 4.192 5.068 4.276 4.678 4.706C4.288 5.136 3.178 6.182 3.178 8.305C3.178 10.428 4.708 12.483 4.933 12.775C5.145 13.067 7.97 17.475 12.404 19.332C15.228 20.514 15.798 20.301 16.425 20.237C17.447 20.134 19.125 19.227 19.479 18.225C19.833 17.223 19.833 16.365 19.721 16.168C19.609 15.972 19.324 15.869 18.962 15.688L17.472 14.382Z" />
@@ -319,7 +322,7 @@ export default function ReservationForm({
                 </div>
 
                 <div className="text-center text-xs text-gray-400 mt-2">
-                    Sera redireccionado a WhatsApp
+                    {isEn ? 'You will be redirected to WhatsApp' : 'Será redireccionado a WhatsApp'}
                 </div>
 
             </form>

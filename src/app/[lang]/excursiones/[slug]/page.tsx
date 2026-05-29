@@ -262,7 +262,7 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
                         {serviciosList.length > 0 ? (
                             <div className="space-y-3">
                                 <h3 className="text-2xl font-extrabold text-ma-verdeazul font-nunito not-italic">
-                                    Servicios incluidos
+                                    {lang === 'en' ? 'Included services' : 'Servicios incluidos'}
                                 </h3>
                                 <ul className="list-disc list-inside font-montserrat text-base text-gray-800 space-y-2 not-italic">
                                     {serviciosList.map((s, i) => (
@@ -275,7 +275,7 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
                         {infoAdicionalList.length > 0 ? (
                             <div className="space-y-3">
                                 <h3 className="text-2xl font-extrabold text-ma-verdeazul font-nunito not-italic">
-                                    Información adicional
+                                    {lang === 'en' ? 'Additional information' : 'Información adicional'}
                                 </h3>
                                 <ul className="list-disc list-inside font-montserrat text-base text-gray-800 space-y-3 not-italic">
                                     {infoAdicionalList.map((b, i) => (
@@ -310,6 +310,7 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
                             messageTemplate={String(settings.whatsapp_template || '')}
                             preciosAdicionales={preciosAdicionales}
                             preciosComplementariosPorPersona={preciosComplPorPersona}
+                            lang={lang}
                         />
                     </div>
                 </div>
@@ -317,12 +318,12 @@ export default async function ExcursionPage({ params }: { params: Promise<{ slug
 
             {/* Gallery Section */}
             <section>
-                <ExcursionGallery images={excursion.gallery_images || []} />
+                <ExcursionGallery images={excursion.gallery_images || []} lang={lang} />
             </section>
 
             {/* Activities Section */}
             <section>
-                <ExcursionActivities activities={mappedActivities} />
+                <ExcursionActivities activities={mappedActivities} lang={lang} />
             </section>
 
         </div>
