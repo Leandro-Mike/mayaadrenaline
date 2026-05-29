@@ -100,7 +100,7 @@ export default async function ContactoPage({ params }: Props) {
                     {/* Form Component */}
                     <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-xl relative overflow-hidden">
                         <h3 className="text-3xl font-bold font-nunito text-ma-verdeazul mb-8">{t.formTitle}</h3>
-                        <ContactForm />
+                        <ContactForm lang={lang} />
                     </div>
 
                 </div>

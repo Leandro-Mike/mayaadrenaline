@@ -2,10 +2,26 @@
 
 import { useState } from 'react';
 
-export default function ContactForm() {
+export default function ContactForm({ lang = 'es' }: { lang?: string }) {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState<null | 'success' | 'error' | 'sending'>(null);
     const [respMessage, setRespMessage] = useState('');
+
+    const isEn = lang === 'en';
+
+    const t = {
+        name: isEn ? 'Name' : 'Nombre',
+        email: isEn ? 'Email' : 'Correo Electrónico',
+        message: isEn ? 'Message' : 'Mensaje',
+        namePlaceholder: isEn ? 'Your full name' : 'Tu nombre completo',
+        emailPlaceholder: isEn ? 'youremail@example.com' : 'tucorreo@ejemplo.com',
+        msgPlaceholder: isEn ? 'How can we help you?' : '¿En qué podemos ayudarte?',
+        btnIdle: isEn ? 'Send Message' : 'Enviar Mensaje',
+        btnSending: isEn ? 'Sending...' : 'Enviando...',
+        success: isEn ? 'Thank you for contacting us.' : 'Gracias por contactarnos.',
+        error: isEn ? 'There was an error. Please try again.' : 'Hubo un error. Inténtalo de nuevo.',
+        errorConn: isEn ? 'Connection error. Please check your internet.' : 'Error de conexión. Por favor verifica tu internet.',
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -30,32 +46,15 @@ export default function ContactForm() {
 
             if (res.ok) {
                 setStatus('success');
-                setRespMessage(data.message || 'Gracias por contactarnos.');
                 setFormData({ name: '', email: '', message: '' });
             } else {
                 setStatus('error');
-                setRespMessage(data.message || 'Hubo un error. Inténtalo de nuevo.');
             }
         } catch (error) {
             console.error("Error submitting form:", error);
             setStatus('error');
-            setRespMessage('Error de conexión. Por favor verifica tu internet.');
+            setRespMessage(t.errorConn);
         }
-    };
-
-    const isEn = typeof window !== 'undefined' && window.location.pathname.startsWith('/en');
-
-    const t = {
-        name: isEn ? 'Name' : 'Nombre',
-        email: isEn ? 'Email' : 'Correo Electrónico',
-        message: isEn ? 'Message' : 'Mensaje',
-        namePlaceholder: isEn ? 'Your full name' : 'Tu nombre completo',
-        emailPlaceholder: isEn ? 'youremail@example.com' : 'tucorreo@ejemplo.com',
-        msgPlaceholder: isEn ? 'How can we help you?' : '¿En qué podemos ayudarte?',
-        btnIdle: isEn ? 'Send Message' : 'Enviar Mensaje',
-        btnSending: isEn ? 'Sending...' : 'Enviando...',
-        success: isEn ? (respMessage === 'Gracias por contactarnos.' ? 'Thank you for contacting us.' : respMessage) : respMessage,
-        error: isEn ? (respMessage === 'Hubo un error. Inténtalo de nuevo.' ? 'There was an error. Please try again.' : respMessage) : respMessage,
     };
 
     return (
