@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "ma-accommodation-promo-dismissed";
-const VILLA_CISNE_URL = "https://villa-cisne.mayaadrenaline.com.mx/";
+const VILLA_CISNE_URL = "https://villacisne.com.mx/";
 
 export default function AccommodationPromoPopup() {
 	const [visible, setVisible] = useState(false);
